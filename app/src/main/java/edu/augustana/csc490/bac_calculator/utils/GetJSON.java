@@ -69,7 +69,7 @@ public class GetJSON {
             Log.i("RateLimit", "Rate Limit Remaining: "+ urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT_REMAINING) + "/" + urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT));
             is = urlConnection.getInputStream();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = br.readLine()) != null) {
