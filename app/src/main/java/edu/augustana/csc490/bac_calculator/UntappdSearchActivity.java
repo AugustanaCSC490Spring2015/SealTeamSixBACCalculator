@@ -2,10 +2,13 @@ package edu.augustana.csc490.bac_calculator;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,6 +51,8 @@ public class UntappdSearchActivity extends Activity {
 
         beers = new ArrayList<UntappdBeer>();
 
+        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         // create and set the custom ArrayAdapter
         adapter = new UntappdSearchListAdapter(this, R.layout.item_untappd_search_list, beers);
         beersListView.setAdapter(adapter);
@@ -66,8 +71,29 @@ public class UntappdSearchActivity extends Activity {
                 String query = searchEditText.getText().toString();
                 if (query != null && !query.equals("")) {
                     new GetBeerSearch().execute();
-                    //adapter.notifyDataSetChanged();
+                    // hide soft keyboard
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
+            }
+        });
+
+        // Enter key listener
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+                            new GetBeerSearch().execute();
+                            // hide soft keyboard
+                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+
+                return false;
             }
         });
 

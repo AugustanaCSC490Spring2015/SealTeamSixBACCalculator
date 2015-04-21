@@ -16,7 +16,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignBottom="@+id/searchUntappdButton"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/searchUntappdButton" />
+            android:layout_toLeftOf="@+id/searchUntappdButton"
+            android:inputType="text"
+            android:singleLine="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
