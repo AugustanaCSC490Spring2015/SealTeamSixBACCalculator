@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/edge_padding"
+    android:paddingBottom="@dimen/edge_padding">
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:id="@+id/beerLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:paddingRight="@dimen/edge_padding" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/beerABV"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="8%" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Beer Name"
+        android:id="@+id/beerName"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/beerLabel"
+        android:layout_toStartOf="@id/beerABV" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Brewery Name"
+        android:id="@+id/breweryName"
+        android:layout_below="@+id/beerName"
+        android:layout_toEndOf="@+id/beerLabel"
+        android:textSize="@dimen/abc_text_size_small_material" />
+
+</RelativeLayout>

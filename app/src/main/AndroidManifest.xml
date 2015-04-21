@@ -25,6 +25,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".UntappdSearchActivity"
+            android:label="@string/untappd_search">
+        </activity>
         />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

@@ -1,0 +1,136 @@
+package edu.augustana.csc490.bac_calculator;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.augustana.csc490.bac_calculator.utils.Constants;
+import edu.augustana.csc490.bac_calculator.utils.GetJSON;
+import edu.augustana.csc490.bac_calculator.utils.UntappdSearchListAdapter;
+
+/**
+ * Created by Dan on 4/20/15.
+ */
+public class UntappdSearchActivity extends Activity {
+
+    private ListView beersListView;
+    private EditText searchEditText;
+    private ImageButton searchButton;
+    private List<UntappdBeer> beers;
+    private SharedPreferences sharedPreferences;
+    private UntappdSearchListAdapter adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_untappd_search);
+
+        sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+
+        beersListView = (ListView) findViewById(R.id.untappdSearchListView);
+        searchButton = (ImageButton) findViewById(R.id.searchUntappdButton);
+        searchEditText = (EditText) findViewById(R.id.searchEditText);
+
+        beers = new ArrayList<UntappdBeer>();
+
+        // create and set the custom ArrayAdapter
+        adapter = new UntappdSearchListAdapter(this, R.layout.item_untappd_search_list, beers);
+        beersListView.setAdapter(adapter);
+        beersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO
+                Toast.makeText(UntappdSearchActivity.this, "Beer selection not yet implemented", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Search Button Click Listener
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String query = searchEditText.getText().toString();
+                if (query != null && !query.equals("")) {
+                    new GetBeerSearch().execute();
+                    //adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+    }
+
+    // Note: AsyncTask must be subclassed to be used.
+    private class GetBeerSearch extends AsyncTask<String, String, JSONObject> {
+        private ProgressDialog progressDialog;
+        private String token;
+        private String query;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            query = searchEditText.getText().toString();
+            progressDialog = new ProgressDialog(UntappdSearchActivity.this);
+            progressDialog.setMessage(getResources().getString(R.string.searching_beers));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(true);
+            token = sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, "");
+            progressDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... args) {
+            GetJSON jsonParser = new GetJSON();
+            JSONObject jsonObject = jsonParser.getBeerSearch(token, query);
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            progressDialog.dismiss();
+            if (jsonObject != null) {
+                try {
+                    JSONObject beersJSONObject = jsonObject.getJSONObject(Constants.TAG_RESPONSE).getJSONObject(Constants.TAG_BEERS);
+                    JSONArray itemsJSONArray = beersJSONObject.getJSONArray(Constants.TAG_ITEMS);
+
+                    // clear old search
+                    beers.clear();
+
+                    for (int i = 0; i < itemsJSONArray.length(); i++) {
+                        JSONObject itemJSONObject = itemsJSONArray.getJSONObject(i);
+                        JSONObject beerJSONObject = itemJSONObject.getJSONObject(Constants.TAG_BEER);
+
+                        String beerName = beerJSONObject.getString(Constants.TAG_BEER_NAME);
+                        String beerABV = beerJSONObject.getString(Constants.TAG_BEER_ABV);
+                        String beerLabel = beerJSONObject.getString(Constants.TAG_BEER_LABEL);
+                        String brewery = itemJSONObject.getJSONObject(Constants.TAG_BREWERY).getString(Constants.TAG_BREWERY_NAME);
+                        UntappdBeer untappdBeer = new UntappdBeer(beerName, brewery, beerLabel, beerABV);
+
+                        beers.add(untappdBeer);
+                    }
+                    adapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
+}

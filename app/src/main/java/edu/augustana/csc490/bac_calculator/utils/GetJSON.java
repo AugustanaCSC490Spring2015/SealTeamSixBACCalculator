@@ -46,6 +46,15 @@ public class GetJSON {
         return getUserInfo(null, token, false);
     }
 
+    public JSONObject getBeerSearch(String token, String query) {
+        StringBuilder url = new StringBuilder(Constants.UNTAPPD_API_URL);
+        url.append(Constants.ENDPOINT_BEER_SEARCH);
+        url.append("?access_token=").append(token);
+        url.append("&q=").append(query);
+
+        return getJSON(url.toString());
+    }
+
     private JSONObject getJSON(String urlString) {
         InputStream is = null;
         JSONObject jsonObject = null;

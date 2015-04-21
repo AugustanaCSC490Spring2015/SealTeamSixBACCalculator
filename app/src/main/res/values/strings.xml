@@ -3,8 +3,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="untappd_settings">Untappd Settings</string>
+    <string name="untappd_search">Untappd Search</string>
     <string name="atuh_app_btn">Authorize App</string>
     <string name="untappd_about_auth">To use Untappd to search for beers and fill in information about them automatically, simply authorize this application by clicking the button below and following the given directions.</string>
     <string name="auth_untappd_dialog_title">Authorize Untappd</string>
     <string name="loading_user_data">Loading User Data...</string>
+    <string name="searching_beers">Searching...</string>
+    <string name="add_untappd_drink_button">Add Untappd Drink</string>
 </resources>
