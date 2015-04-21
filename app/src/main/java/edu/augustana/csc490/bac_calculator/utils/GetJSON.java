@@ -85,7 +85,7 @@ public class GetJSON {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("LEFT", jsonObject.toString());
+
         return jsonObject;
     }
 }
