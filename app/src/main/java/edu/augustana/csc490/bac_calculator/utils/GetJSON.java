@@ -1,5 +1,7 @@
 package edu.augustana.csc490.bac_calculator.utils;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,6 +66,7 @@ public class GetJSON {
             URL url = new URL(urlString);
             URLConnection urlConnection = url.openConnection();
             urlConnection.connect();
+            Log.i("RateLimit", "Rate Limit Remaining: "+ urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT_REMAINING) + "/" + urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT));
             is = urlConnection.getInputStream();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
@@ -82,7 +85,7 @@ public class GetJSON {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i("LEFT", jsonObject.toString());
         return jsonObject;
     }
 }

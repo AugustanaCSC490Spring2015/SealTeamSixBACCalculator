@@ -35,7 +35,9 @@ public class Constants {
     public static final String TAG_BREWERY = "brewery";
     public static final String TAG_BREWERY_NAME = "brewery_name";
 
-
+    // HTTP Headers
+    public static final String HEADER_RATE_LIMIT = "X-Ratelimit-Limit";
+    public static final String HEADER_RATE_LIMIT_REMAINING = "X-Ratelimit-Remaining";
 
     /**
      * Endpoints
