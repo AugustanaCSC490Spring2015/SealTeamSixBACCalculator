@@ -10,4 +10,11 @@
     <string name="loading_user_data">Loading User Data...</string>
     <string name="searching_beers">Searching...</string>
     <string name="add_untappd_drink_button">Add Untappd Drink</string>
+    <string name="drink_name">Drink Name</string>
+    <string name="drink_volume_oz">Volume (oz)</string>
+    <string name="drink_alcohol_content_abv">Alcohol Content (% vol.)</string>
+    <string name="drink_start_time_label">Drink Started</string>
+    <string name="finish_drink_checkbox_label">Finish drink using menu button</string>
+    <string name="drink_end_time_label">Finished Drink</string>
+    <string name="add_drink_button">Add Drink</string>
 </resources>
