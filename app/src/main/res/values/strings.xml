@@ -17,5 +17,4 @@
     <string name="finish_drink_checkbox_label">Finish drink using menu button</string>
     <string name="drink_end_time_label">Finished Drink</string>
     <string name="add_drink_button">Add Drink</string>
-    <string name="add_drink_dialog_title">Add Drink to Log</string>
 </resources>

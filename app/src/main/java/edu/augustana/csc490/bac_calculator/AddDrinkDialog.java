@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -50,7 +51,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.add_drink_dialog_title);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.add_drink_dialog);
 
         drinkNameEditText = (EditText) findViewById(R.id.drinkNameEditText);
