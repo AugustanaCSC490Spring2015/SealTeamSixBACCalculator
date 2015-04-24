@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -59,8 +60,8 @@ public class UntappdSearchActivity extends Activity {
         beersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO
-                Toast.makeText(UntappdSearchActivity.this, "Beer selection not yet implemented", Toast.LENGTH_SHORT).show();
+                UntappdBeer selectedBeer = beers.get(i);
+                new AddDrinkDialog(UntappdSearchActivity.this, selectedBeer.getBeerName(), selectedBeer.getBeerABV()).show();
             }
         });
 
