@@ -100,7 +100,8 @@
             android:layout_height="wrap_content"
             android:text="11:26 PM"
             android:id="@+id/drinkFinishedTimeButton"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:enabled="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -115,7 +116,8 @@
             android:layout_height="wrap_content"
             android:text="12/15/2015"
             android:id="@+id/drinkFinishedDateButton"
-            android:layout_toLeftOf="@+id/drinkFinishedTimeButton" />
+            android:layout_toLeftOf="@+id/drinkFinishedTimeButton"
+            android:enabled="false" />
     </RelativeLayout>
 
     <RelativeLayout
