@@ -4,17 +4,11 @@
     android:layout_height="match_parent"
     android:padding="@dimen/edge_padding">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/drink_name"
-        android:id="@+id/drinkNameLabel" />
-
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/drinkNameEditText" />
+        android:id="@+id/drinkNameEditText"
+        android:hint="Drink Name" />
 
     <GridLayout
         android:layout_width="fill_parent"
@@ -29,13 +23,16 @@
             android:text="@string/drink_volume_oz"
             android:id="@+id/drinkVolumeLabel"
             android:paddingRight="@dimen/edge_padding"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="center_vertical" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/drinkVolumeEditText"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:inputType="numberDecimal"
+            android:hint="0.0"
+            android:gravity="right" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,13 +41,16 @@
             android:text="@string/drink_alcohol_content_abv"
             android:id="@+id/drinkAlcoholContentLabel"
             android:paddingRight="@dimen/edge_padding"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="center_vertical" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/drinkAlcoholContentEditText"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:inputType="numberDecimal"
+            android:hint="0.0"
+            android:gravity="right" />
 
     </GridLayout>
 
@@ -121,18 +121,12 @@
             android:enabled="false" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <Button
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/addDrinkButtonLayout">
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_drink_button"
-            android:id="@+id/addDrinkButton"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/add_drink_button"
+        android:id="@+id/addDrinkButton"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true" />
 
 </LinearLayout>
