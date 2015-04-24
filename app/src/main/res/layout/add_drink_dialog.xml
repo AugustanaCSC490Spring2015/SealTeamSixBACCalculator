@@ -109,7 +109,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/drink_end_time_label"
             android:id="@+id/drinkFinishedLabel"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:enabled="false" />
 
         <Button
             android:layout_width="wrap_content"
