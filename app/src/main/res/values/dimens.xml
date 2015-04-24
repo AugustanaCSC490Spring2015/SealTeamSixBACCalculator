@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="edge_padding">8dp</dimen>
+    <dimen name="dashboard_button_height">60dp</dimen>
 </resources>

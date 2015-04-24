@@ -5,10 +5,97 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <Button
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/sober_in"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient"
+            android:padding="0dp" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:id="@+id/imageView"
+            android:padding="0dp"
+            android:background="#ff598fa2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/current_BAC"
+            android:id="@+id/textView2"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient"
+            android:padding="0dp" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:id="@+id/imageView2"
+            android:background="#ff598fa2"
+            android:padding="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/max_BAC"
+            android:id="@+id/textView3"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient"
+            android:padding="0dp" />
+
+    </LinearLayout>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/graph"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#dddddd" />
+
+    <ListView
         android:layout_width="wrap_content"
+        android:layout_height="155dp"
+        android:id="@+id/listView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/finish_drink"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_untappd_drink_button"
         android:id="@+id/addDrinkButton"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
 </LinearLayout>
