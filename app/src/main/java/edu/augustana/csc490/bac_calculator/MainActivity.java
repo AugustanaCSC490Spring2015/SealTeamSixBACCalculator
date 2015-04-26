@@ -10,8 +10,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 
@@ -43,15 +48,45 @@ public class MainActivity extends ActionBarActivity {
 
 
         //graph view
+
+        // example data for testing
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 30);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 30);
+        Date d3 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 30);
+        Date d4 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 30);
+        Date d5 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 30);
+        Date d6 = calendar.getTime();
+
         GraphView graph = (GraphView) findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
+                new DataPoint(d1, 0.02),
+                new DataPoint(d2, 0.04),
+                new DataPoint(d3, 0.07),
+                new DataPoint(d4, 0.09),
+                new DataPoint(d5, 0.10),
+                new DataPoint(d6, 0.11)
         });
         graph.addSeries(series);
+
+        // set date label formatter
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, dateFormat));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+
+        // graph viewport settings
+        graph.getViewport().setMinX(d2.getTime());
+        graph.getViewport().setMaxX(d5.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinY(0.0);
+        graph.getViewport().setMaxY(0.4);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setScalable(true);
 
 
 
