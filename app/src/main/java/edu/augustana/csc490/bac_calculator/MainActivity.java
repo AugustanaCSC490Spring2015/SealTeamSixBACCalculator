@@ -1,5 +1,7 @@
 package edu.augustana.csc490.bac_calculator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -23,32 +25,51 @@ import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 public class MainActivity extends ActionBarActivity {
 
-    Button addUntappdDrinkButton;
+    Button addDrinkButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addUntappdDrinkButton = (Button) findViewById(R.id.addDrinkButton);
+        addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
 
-        // For Testing - Disable button if user is not signed in
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
-        if (!sharedPreferences.contains(Constants.PREF_UNTAPPD_TOKEN) || sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null) {
-            addUntappdDrinkButton.setEnabled(false);
-        }
-        // Testing for Untappd Search
-        addUntappdDrinkButton.setOnClickListener(new View.OnClickListener() {
+        addDrinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
-                startActivity(intent);
+                // Check if user is not logged into Untappd
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+                if (!sharedPreferences.contains(Constants.PREF_UNTAPPD_TOKEN) || sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null) {
+                    // Show manual add drink dialog
+                    new AddDrinkDialog(MainActivity.this).show();
+                } else {
+                    // the user is logged into Untappd
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle(R.string.choose_option);
+                    builder.setItems(R.array.add_drink_options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0: // Manually add drink
+                                    // Show manual add drink dialog
+                                    new AddDrinkDialog(MainActivity.this).show();
+                                    break;
+                                case 1: // Search Untappd
+                                    Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+                    builder.create().show();
+                }
             }
         });
 
 
         //graph view
-
         // example data for testing
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
