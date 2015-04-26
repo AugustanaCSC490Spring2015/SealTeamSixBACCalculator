@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -49,36 +51,9 @@ public class UntappdSearchListAdapter extends ArrayAdapter<UntappdBeer> {
         breweryName.setText(beers.get(position).getBreweryName());
         beerABV.setText(beers.get(position).getBeerABV() + "%");
 
-        new DownloadImageTask(beerLabel).execute(beers.get(position).getBeerLabel());
+        ImageLoader.getInstance().displayImage(beers.get(position).getBeerLabel(), beerLabel);
 
         return rowView;
-    }
-
-    // http://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream is = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(is);
-                is.close();
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 
 }

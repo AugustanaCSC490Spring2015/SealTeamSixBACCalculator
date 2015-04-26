@@ -16,6 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,6 +102,16 @@ public class UntappdSearchActivity extends Activity {
             }
         });
 
+        // Universal Image Loader Setup
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .defaultDisplayImageOptions(options)
+                .diskCacheSize(25 *1024 * 1024) // 25MB in bytes
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
     // Note: AsyncTask must be subclassed to be used.
