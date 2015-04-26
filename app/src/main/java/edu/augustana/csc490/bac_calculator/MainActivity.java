@@ -86,12 +86,12 @@ public class MainActivity extends ActionBarActivity {
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(d1, 0.02),
-                new DataPoint(d2, 0.04),
-                new DataPoint(d3, 0.07),
-                new DataPoint(d4, 0.09),
-                new DataPoint(d5, 0.10),
-                new DataPoint(d6, 0.11)
+            new DataPoint(d1, 0.02),
+            new DataPoint(d2, 0.04),
+            new DataPoint(d3, 0.07),
+            new DataPoint(d4, 0.09),
+            new DataPoint(d5, 0.10),
+            new DataPoint(d6, 0.11)
         });
         graph.addSeries(series);
 
@@ -108,10 +108,6 @@ public class MainActivity extends ActionBarActivity {
         graph.getViewport().setMaxY(0.4);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
-
-
-
-
     }
 
     @Override
