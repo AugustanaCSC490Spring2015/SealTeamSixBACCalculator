@@ -64,38 +64,44 @@
     </LinearLayout>
 
     <com.jjoe64.graphview.GraphView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="150dp"
         android:id="@+id/graph"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:background="#dddddd" />
+        android:background="#dddddd"
+        android:layout_marginLeft="@dimen/edge_padding"
+        android:layout_marginTop="@dimen/edge_padding"
+        android:layout_marginRight="@dimen/edge_padding" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="155dp"
-        android:id="@+id/listView"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp" />
-
-    <Button
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/finish_drink"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_gravity="bottom"
+        android:padding="@dimen/edge_padding">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_drink_button"
-        android:id="@+id/addDrinkButton"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_drink_button"
+            android:id="@+id/addDrinkButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/finish_drink"
+            android:id="@+id/finishDrinkButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_above="@+id/addDrinkButton" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="155dp"
+            android:id="@+id/listView"
+            android:layout_alignParentStart="false"
+            android:layout_above="@+id/finishDrinkButton"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
 </LinearLayout>
