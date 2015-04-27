@@ -16,14 +16,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +106,7 @@ public class UntappdSearchActivity extends Activity {
         });
 
         // Universal Image Loader Setup
+        File cacheDir = StorageUtils.getCacheDirectory(this);
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -110,6 +114,7 @@ public class UntappdSearchActivity extends Activity {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(options)
                 .diskCacheSize(25 *1024 * 1024) // 25MB in bytes
+                .diskCache(new LimitedAgeDiscCache(cacheDir, 60 * 60 * 24)) // per Untappd API term #13
                 .build();
         ImageLoader.getInstance().init(config);
     }

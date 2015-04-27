@@ -6,6 +6,15 @@
     tools:context=".UntappdSettingsActivity"
     android:padding="@dimen/edge_padding">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbuImageView"
+        android:src="@drawable/pbu_80_black"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="@dimen/edge_padding"
+        android:paddingTop="@dimen/edge_padding" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
