@@ -1,19 +1,20 @@
 package edu.augustana.csc490.bac_calculator;
 
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 /**
  * Created by Dan on 4/24/15.
@@ -32,6 +33,18 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     private String drinkName;
     private String drinkABV;
     private TextView drinkFinishedLabel;
+    private int drinkStartedHour;
+    private int drinkStartedMinute;
+    private int drinkStartedDay;
+    private int drinkStartedMonth;
+    private int drinkStartedYear;
+    private int drinkFinishedHour;
+    private int drinkFinishedMinute;
+    private int drinkFinishedDay;
+    private int drinkFinishedMonth;
+    private int drinkFinishedYear;
+
+
 
     public AddDrinkDialog(Context context) {
         super(context);
@@ -92,7 +105,103 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
             drinkAlcoholContentEditText.setText(drinkABV);
         }
 
+        // get calendar and current time and date
+        final Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // months 0-11
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY); // hours 0-23
+        int currentMinute = calendar.get(Calendar.MINUTE); // 0-59
+
+        // set the inital times the date and time dialogs should be set at
+        drinkStartedYear = currentYear;
+        drinkStartedMonth = currentMonth;
+        drinkStartedDay = currentDay;
+        drinkStartedHour = currentHour;
+        drinkStartedMinute = currentMinute;
+        drinkFinishedYear = currentYear;
+        drinkFinishedMonth = currentMonth;
+        drinkFinishedDay = currentDay;
+        drinkFinishedHour = currentHour;
+        drinkFinishedMinute = currentMinute;
+
+
+        //set date and time defaults
+        drinkStartedDateButton.setText(getDateString(currentMonth, currentDay, currentYear));
+        drinkStartedTimeButton.setText(getTimeString(currentHour, currentMinute));
+        drinkFinishedDateButton.setText(getDateString(currentMonth, currentDay, currentYear));
+        drinkFinishedTimeButton.setText(getTimeString(currentHour, currentMinute));
+
     }
+
+    private String getDateString(int month, int day, int year) {
+        drinkStartedMonth = month;
+        drinkStartedDay = day;
+        drinkStartedYear = year;
+        return month + "/" + day + "/" + year;
+    }
+
+    private String getTimeString(int hour, int minute) {
+        String stringMinute = "" + minute;
+        String amPmString = " AM";
+        if (hour >= 12) {
+            amPmString = " PM";
+        }
+        if (minute >= 60) {
+            minute = minute%60;
+            hour++;
+        }
+        if (hour >= 12) {
+            hour = hour%12;
+        }
+
+        if (hour == 0) {
+            hour = 12;
+        }
+        if (minute <  10) {
+            stringMinute = "0"+minute;
+        }
+
+        return hour  + ":" + stringMinute + amPmString;
+    }
+
+    private DatePickerDialog.OnDateSetListener drinkStartedDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            drinkStartedYear = year;
+            drinkStartedMonth = monthOfYear;
+            drinkStartedDay = dayOfMonth;
+            drinkStartedDateButton.setText(getDateString(monthOfYear, dayOfMonth, year));
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener drinkStartedTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            drinkStartedHour = hourOfDay;
+            drinkStartedMinute = minute;
+            drinkStartedTimeButton.setText(getTimeString(hourOfDay, minute));
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener drinkFinishedDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            drinkFinishedYear = year;
+            drinkFinishedMonth = monthOfYear;
+            drinkFinishedDay = dayOfMonth;
+            drinkFinishedDateButton.setText(getDateString(monthOfYear, dayOfMonth, year));
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener drinkFinishedTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            drinkFinishedHour = hourOfDay;
+            drinkFinishedMinute = minute;
+            drinkFinishedTimeButton.setText(getTimeString(hourOfDay, minute));
+        }
+    };
 
     private void setDrinkFinishedButtonsEnabled(Boolean isEnabled) {
         drinkFinishedTimeButton.setEnabled(isEnabled);
@@ -105,19 +214,19 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addDrinkButton:
-                // do somethings
+                // do something
                 break;
             case R.id.drinkStartedTimeButton:
-                // do somethings
+                new TimePickerDialog(getContext(), drinkStartedTimeListener, drinkStartedHour, drinkStartedMinute, false).show();
                 break;
             case R.id.drinkStartedDateButton:
-                //do something
+                new DatePickerDialog(getContext(), drinkStartedDateListener, drinkStartedYear, drinkStartedMonth, drinkStartedDay).show();
                 break;
             case R.id.drinkFinishedTimeButton:
-                // do something
+                new TimePickerDialog(getContext(), drinkFinishedTimeListener, drinkFinishedHour, drinkFinishedMinute, false).show();
                 break;
             case R.id.drinkFinishedDateButton:
-                // do something
+                new DatePickerDialog(getContext(), drinkFinishedDateListener, drinkFinishedYear, drinkFinishedMonth, drinkFinishedDay).show();
                 break;
             default:
                 break;
