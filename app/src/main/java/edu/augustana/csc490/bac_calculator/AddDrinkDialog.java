@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -43,6 +44,9 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     private int drinkFinishedDay;
     private int drinkFinishedMonth;
     private int drinkFinishedYear;
+
+    Drink startedDrink;
+    ArrayList drinkLog = new ArrayList<Drink>();
 
 
 
@@ -215,6 +219,33 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.addDrinkButton:
                 // do something
+
+                // test for if checkbox is checked or not
+                if (drinkFinishedCheckBox.isChecked()){
+
+                    // initialized to zero to avoid null pointer...
+                    drinkFinishedHour = 0;
+                    drinkFinishedMinute = 0;
+                    drinkFinishedDay = 0;
+                    drinkFinishedMonth = 0;
+                    drinkFinishedYear = 0;
+
+                    // create a new drink item
+                    startedDrink = new Drink(drinkName, drinkABV, drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
+                            drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
+                } else {
+
+                    // create a new drink item
+                    startedDrink = new Drink(drinkName, drinkABV, drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
+                            drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
+
+                }
+
+                // add drink to arrayList and close dialog box
+                drinkLog.add(startedDrink);
+                dismiss();
+
+
                 break;
             case R.id.drinkStartedTimeButton:
                 new TimePickerDialog(getContext(), drinkStartedTimeListener, drinkStartedHour, drinkStartedMinute, false).show();
