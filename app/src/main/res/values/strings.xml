@@ -17,10 +17,11 @@
     <string name="drink_start_time_label">Drink Started</string>
     <string name="finish_drink_checkbox_label">Finish drink using menu button</string>
     <string name="drink_end_time_label">Finished Drink</string>
-    <string name="add_drink_button">Add Drink</string>
+    <string name="add_drink_button">ADD DRINK</string>
     <string name="sober_in">SOBER IN: 0.00</string>
     <string name="current_BAC">0.00</string>
     <string name="max_BAC">0.00</string>
     <string name="finish_drink">FINISH DRINK</string>
     <string name="choose_option">Choose and Option</string>
+    <string name="history_label">YOUR HISTORY:</string>
 </resources>

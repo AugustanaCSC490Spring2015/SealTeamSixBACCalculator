@@ -72,11 +72,33 @@
         android:layout_marginTop="@dimen/edge_padding"
         android:layout_marginRight="@dimen/edge_padding" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/history_label"
+        android:id="@+id/textView4"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/edge_padding"
+        android:textColor="#7ab1c4"
+        android:textStyle="bold" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:padding="@dimen/edge_padding">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/listView"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="false"
+            android:layout_above="@+id/finishDrinkButton"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/edge_padding"
+            android:layout_marginTop="@dimen/edge_padding" />
 
         <Button
             android:layout_width="match_parent"
@@ -85,7 +107,10 @@
             android:id="@+id/addDrinkButton"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentRight="false"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/blue_gradient"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         <Button
             android:layout_width="match_parent"
@@ -93,15 +118,11 @@
             android:text="@string/finish_drink"
             android:id="@+id/finishDrinkButton"
             android:layout_gravity="center_horizontal"
-            android:layout_above="@+id/addDrinkButton" />
+            android:layout_above="@+id/addDrinkButton"
+            android:background="@drawable/gray_gradient"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="155dp"
-            android:id="@+id/listView"
-            android:layout_alignParentStart="false"
-            android:layout_above="@+id/finishDrinkButton"
-            android:layout_alignParentTop="true" />
     </RelativeLayout>
 
 </LinearLayout>

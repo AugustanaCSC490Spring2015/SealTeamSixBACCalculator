@@ -9,14 +9,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
 
@@ -71,41 +75,70 @@ public class MainActivity extends ActionBarActivity {
 
         //graph view
         // example data for testing
+        ArrayList<Date> exampleDates = new ArrayList<Date>();
         Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 30);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 30);
-        Date d3 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 30);
-        Date d4 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 30);
-        Date d5 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 30);
-        Date d6 = calendar.getTime();
+        for (int i = 0; i < 6; i++) {
+            exampleDates.add(calendar.getTime());
+            calendar.add(Calendar.MINUTE, 30);
+        }
+
+
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-            new DataPoint(d1, 0.02),
-            new DataPoint(d2, 0.04),
-            new DataPoint(d3, 0.07),
-            new DataPoint(d4, 0.09),
-            new DataPoint(d5, 0.10),
-            new DataPoint(d6, 0.11)
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(exampleDates.get(0), 0.02),
+                new DataPoint(exampleDates.get(1), 0.04),
+                new DataPoint(exampleDates.get(2), 0.07),
+                new DataPoint(exampleDates.get(3), 0.09),
+                new DataPoint(exampleDates.get(4), 0.10),
+                new DataPoint(exampleDates.get(5), 0.11)
         });
         graph.addSeries(series);
 
-        // set date label formatter
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        /**
+         * formattedDates is an ArrayList of the dates formatted to show just the
+         * month, day, and time
+         */
+        ArrayList<String> formattedDates = new ArrayList<String>();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd hh:mm a");
+        for (int i = 0; i < 6; i++) {
+            formattedDates.add(formatter.format(exampleDates.get(i)));
+        }
+
+        /** ArrayList RecentList the # most recent entries as strings,
+         * including the date/time and the BAC value
+         */
+        ArrayList<String> RecentList = new ArrayList<String>();
+        RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
+        RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
+        RecentList.add(formattedDates.get(2) + "  -  " + "0.09");
+        RecentList.add(formattedDates.get(3) + "  -  " + "0.07");
+        RecentList.add(formattedDates.get(4) + "  -  " + "0.04");
+        RecentList.add(formattedDates.get(5) + "  -  " + "0.02");
+
+
+ /** arrayAdapter adapts RecentList to the dashboard list view lv
+ */
+        ListView lv = (ListView) findViewById(R.id.listView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                R.layout.dashboard_list_item,
+                RecentList);
+
+        lv.setAdapter(arrayAdapter);
+
+        // set date x-axis label formatter
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, dateFormat));
         graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         // graph viewport settings
-        graph.getViewport().setMinX(d2.getTime());
-        graph.getViewport().setMaxX(d5.getTime());
+        graph.getViewport().setMinX(exampleDates.get(1).getTime());
+        graph.getViewport().setMaxX(exampleDates.get(4).getTime());
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinY(0.0);
-        graph.getViewport().setMaxY(0.4);
+        graph.getViewport().setMaxY(0.3);
+        graph.getGridLabelRenderer().setNumVerticalLabels(4);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
     }
