@@ -122,11 +122,12 @@ public class MainActivity extends ActionBarActivity {
         // Handle clicks on the action bar items
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // do something
-                return true;
+                Intent userSettingsIntent = new Intent(this, UserSettingsActivity.class);
+                startActivity(userSettingsIntent);
+                return true; // return true to close menu
             case R.id.untappd_settings:
-                Intent intent = new Intent(this, UntappdSettingsActivity.class);
-                startActivity(intent);
+                Intent untappdSettingsIntent = new Intent(this, UntappdSettingsActivity.class);
+                startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
             default:
                 return super.onOptionsItemSelected(item);
