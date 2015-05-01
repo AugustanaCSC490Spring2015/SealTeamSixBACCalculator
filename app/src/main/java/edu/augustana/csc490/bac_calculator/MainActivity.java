@@ -28,13 +28,16 @@ import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 public class MainActivity extends ActionBarActivity {
 
-    Button addDrinkButton;
+    Button addDrinkButton, finishDrinkButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**@TODO: code finish drink button
+         */
+        finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
 
@@ -75,13 +78,17 @@ public class MainActivity extends ActionBarActivity {
 
         //graph view
         // example data for testing
+        /** Graph View
+         * example data for testing
+         * @TODO: integrate real data
+         */
+
         ArrayList<Date> exampleDates = new ArrayList<Date>();
         Calendar calendar = Calendar.getInstance();
         for (int i = 0; i < 6; i++) {
             exampleDates.add(calendar.getTime());
             calendar.add(Calendar.MINUTE, 30);
         }
-
 
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
@@ -105,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
             formattedDates.add(formatter.format(exampleDates.get(i)));
         }
 
-        /** ArrayList RecentList the # most recent entries as strings,
+        /** ArrayList RecentList contains the # most recent entries as strings,
          * including the date/time and the BAC value
          */
         ArrayList<String> RecentList = new ArrayList<String>();
@@ -117,8 +124,8 @@ public class MainActivity extends ActionBarActivity {
         RecentList.add(formattedDates.get(5) + "  -  " + "0.02");
 
 
- /** arrayAdapter adapts RecentList to the dashboard list view lv
- */
+        /** arrayAdapter adapts RecentList to the dashboard list view lv
+         */
         ListView lv = (ListView) findViewById(R.id.listView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,

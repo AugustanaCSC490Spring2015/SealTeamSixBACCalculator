@@ -5,5 +5,8 @@
     android:gravity="center_horizontal"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textAlignment="gravity"
-    android:padding="3dp">
+    android:padding="3dp"
+    >
+    <!-- default text
+    android:text="No Entries"-->
 </TextView>
