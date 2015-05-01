@@ -109,7 +109,7 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/blue_gradient"
+            android:background="#FF83C2D8"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         <Button
@@ -119,7 +119,7 @@
             android:id="@+id/finishDrinkButton"
             android:layout_gravity="center_horizontal"
             android:layout_above="@+id/addDrinkButton"
-            android:background="@drawable/gray_gradient"
+            android:background="#FFAFAFAF"
             android:layout_marginBottom="8dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
