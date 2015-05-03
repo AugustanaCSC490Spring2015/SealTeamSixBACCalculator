@@ -1,33 +1,25 @@
 package edu.augustana.csc490.bac_calculator.utils;
 
 import android.content.SharedPreferences;
+import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 public class CalculatorManager {
 
-    // Body Water Constants
-    public static final double maleConstant = 0.68;     // (L/Kg)
-    public static final double femaleConstant = 0.55;   // L/Kg
-
-    // Widmark's Constant
-    public static final double widmarksConstant = 0.8;
-
-    public static final double ouncesInPounds = 16.0;
-    public static final double gramsInKilograms = 1000.0;
-
+    // Variables
     public static double totalAlcoholInOunces;
     public static double weightInPounds;
     public static double totalHoursSinceFirstDrink;
     public static double averageAlcoholEliminationRate;  // avg. is 0.015
     public static boolean isMale;
 
+    // SharedPreferences stuff
     public static SharedPreferences savedPreferences;
-
 
     public static double calculateCurrentBAC() {
 
         /**
          * Widmark Formula:
-         * A = (Wr(Ct+Bt))/(8z)  (Solve for Ct)
+         * A = (Wr(Ct+Bt))/(0.8z)  (Solve for Ct)
          *
          * A: number of drinks consumed
          * W: body weight (ounces)
@@ -35,15 +27,17 @@ public class CalculatorManager {
          * Ct: BAC (Kg/L)
          * B: alcohol elimination rate (Kg/L/hr)
          * t: time since first drink (hours)
+         * 0.8: Widmark's constant
          * z: fluid ounces of alcohol/drink
          */
 
-        double bodyWater = weightInPounds * ouncesInPounds * getWaterConstant();
-        double alcoholElimation = (averageAlcoholEliminationRate / gramsInKilograms) * totalHoursSinceFirstDrink;
+        double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
+        double alcoholElimination = (averageAlcoholEliminationRate / Constants.GRAMS_IN_KILOGRAMS) * totalHoursSinceFirstDrink;
 
-        return ((totalAlcoholInOunces* widmarksConstant) / bodyWater) - alcoholElimation;
+        return ((totalAlcoholInOunces* Constants.WIDMARKS_CONSTANT) / bodyWater) - alcoholElimination;
     }
 
+    // Adds drink to total alcohol in system
     public static void addToTotalAchohol(double ounces, double alcoholPercent){
 
         double totalAlcoholInDrink = ounces * alcoholPercent;
@@ -51,11 +45,28 @@ public class CalculatorManager {
 
     }
 
+    // Gets body water distribution that depends on male/female
     public static double getWaterConstant(){
         if(isMale){
-            return maleConstant;
+            return Constants.MALE_CONSTANT;
         } else {
-            return femaleConstant;
+            return Constants.FEMALE_CONSTANT;
         }
+    }
+
+    public static void loadBACPreferences(){
+        totalAlcoholInOunces = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_ALCOHOL, "0.0"));  // default value of 0.0
+        isMale = savedPreferences.getBoolean(Constants.PREF_GENDER, true); // default value of "Male"
+        weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "0.0"));  // default value of 0.0
+        totalHoursSinceFirstDrink = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_HOURS, "0.0"));  // default value of 0.0
+        averageAlcoholEliminationRate = Double.parseDouble(savedPreferences.getString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, "0.015")); // default value of 0.015 (average)
+    }
+
+    public static void saveBACPreferences(){
+        savedPreferences.edit().putString(Constants.PREF_TOTAL_ALCOHOL, totalAlcoholInOunces + "");
+        savedPreferences.edit().putBoolean(Constants.PREF_GENDER, isMale);
+        savedPreferences.edit().putString(Constants.PREF_WEIGHT, weightInPounds + "");
+        savedPreferences.edit().putString(Constants.PREF_TOTAL_HOURS, totalHoursSinceFirstDrink + "");
+        savedPreferences.edit().putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, averageAlcoholEliminationRate + "");
     }
 }

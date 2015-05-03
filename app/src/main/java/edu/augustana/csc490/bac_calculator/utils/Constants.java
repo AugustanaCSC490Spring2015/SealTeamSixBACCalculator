@@ -16,6 +16,11 @@ public class Constants {
     public static final String PREF_USER_FIRST_NAME = "firstName";
     public static final String PREF_USER_LAST_NAME = "lastName";
     public static final String PREF_USER_USERNAME = "username";
+    public static final String PREF_TOTAL_ALCOHOL = "totalAlcohol";
+    public static final String PREF_GENDER = "gender";
+    public static final String PREF_WEIGHT = "weight";
+    public static final String PREF_TOTAL_HOURS = "totalHours";
+    public static final String PREF_AVG_ALC_ELIMINATION_RATE = "averageAlcoholEliminationRate";
 
     // JSON TAGS
     public static final String TAG_RESPONSE = "response";
@@ -35,6 +40,14 @@ public class Constants {
     // HTTP Headers
     public static final String HEADER_RATE_LIMIT = "X-Ratelimit-Limit";
     public static final String HEADER_RATE_LIMIT_REMAINING = "X-Ratelimit-Remaining";
+
+    // BAC Constants
+    public static final double WIDMARKS_CONSTANT = 0.8;
+    public static final double OUNCES_IN_POUNDS = 16.0;
+    public static final double GRAMS_IN_KILOGRAMS = 1000.0;
+    // Body Water Constants
+    public static final double MALE_CONSTANT = 0.68;     // (L/Kg)
+    public static final double FEMALE_CONSTANT = 0.55;   // (L/Kg)
 
     /**
      * Endpoints
