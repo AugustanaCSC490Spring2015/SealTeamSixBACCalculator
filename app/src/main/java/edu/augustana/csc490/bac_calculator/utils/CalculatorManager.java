@@ -1,7 +1,7 @@
 package edu.augustana.csc490.bac_calculator.utils;
 
 import android.content.SharedPreferences;
-import edu.augustana.csc490.bac_calculator.utils.Constants;
+import android.util.Log;
 
 public class CalculatorManager {
 
@@ -11,6 +11,7 @@ public class CalculatorManager {
     public static double totalHoursSinceFirstDrink;
     public static double averageAlcoholEliminationRate;  // avg. is 0.015
     public static boolean isMale;
+    public static double currentBAC;
 
     // SharedPreferences stuff
     public static SharedPreferences savedPreferences;
@@ -33,16 +34,16 @@ public class CalculatorManager {
 
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
         double alcoholElimination = (averageAlcoholEliminationRate / Constants.GRAMS_IN_KILOGRAMS) * totalHoursSinceFirstDrink;
-
-        return ((totalAlcoholInOunces* Constants.WIDMARKS_CONSTANT) / bodyWater) - alcoholElimination;
+        currentBAC = ((totalAlcoholInOunces* Constants.WIDMARKS_CONSTANT) / bodyWater) - alcoholElimination;
+        Log.e("BAC", "Current BAC:" + Double.toString(CalculatorManager.currentBAC));
+        saveBACPreferences();
+        return currentBAC;
     }
 
     // Adds drink to total alcohol in system
-    public static void addToTotalAchohol(double ounces, double alcoholPercent){
-
-        double totalAlcoholInDrink = ounces * alcoholPercent;
+    public static void addDrinkToCalculation(double ounces, double ABV){
+        double totalAlcoholInDrink = ounces * ABV;
         totalAlcoholInOunces += totalAlcoholInDrink;
-
     }
 
     // Gets body water distribution that depends on male/female
@@ -63,10 +64,10 @@ public class CalculatorManager {
     }
 
     public static void saveBACPreferences(){
-        savedPreferences.edit().putString(Constants.PREF_TOTAL_ALCOHOL, totalAlcoholInOunces + "");
+        savedPreferences.edit().putString(Constants.PREF_TOTAL_ALCOHOL, Double.toString(totalAlcoholInOunces));
         savedPreferences.edit().putBoolean(Constants.PREF_GENDER, isMale);
-        savedPreferences.edit().putString(Constants.PREF_WEIGHT, weightInPounds + "");
-        savedPreferences.edit().putString(Constants.PREF_TOTAL_HOURS, totalHoursSinceFirstDrink + "");
-        savedPreferences.edit().putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, averageAlcoholEliminationRate + "");
+        savedPreferences.edit().putString(Constants.PREF_WEIGHT, Double.toString(weightInPounds));
+        savedPreferences.edit().putString(Constants.PREF_TOTAL_HOURS, Double.toString(totalHoursSinceFirstDrink));
+        savedPreferences.edit().putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, Double.toString(averageAlcoholEliminationRate));
     }
 }

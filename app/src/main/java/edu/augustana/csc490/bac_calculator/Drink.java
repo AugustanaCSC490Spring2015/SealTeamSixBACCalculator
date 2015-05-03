@@ -7,6 +7,7 @@ public class Drink {
 
     private String drinkName;
     private String drinkABV;
+    private String drinkVolume;
     private int drinkStartedHour;
     private int drinkStartedMinute;
     private int drinkStartedDay;
@@ -18,12 +19,13 @@ public class Drink {
     private int drinkFinishedMonth;
     private int drinkFinishedYear;
 
-    public Drink(String drinkName, String drinkABV, int drinkStartedHour, int drinkStartedMinute, int drinkStartedDay, int drinkStartedMonth,
+    public Drink(String drinkName, String drinkABV, String drinkVolume, int drinkStartedHour, int drinkStartedMinute, int drinkStartedDay, int drinkStartedMonth,
                  int drinkStartedYear, int drinkFinishedHour, int drinkFinishedMinute, int drinkFinishedDay, int drinkFinishedMonth,
                  int drinkFinishedYear) {
 
         this.drinkName = drinkName;
         this.drinkABV = drinkABV;
+        this.drinkVolume = drinkVolume;
         this.drinkStartedHour = drinkStartedHour;
         this.drinkStartedMinute = drinkStartedMinute;
         this.drinkStartedDay = drinkStartedDay;
@@ -35,6 +37,13 @@ public class Drink {
         this.drinkFinishedMonth = drinkFinishedMonth;
         this.drinkFinishedYear = drinkFinishedYear;
 
+    }
 
+    public Double getDrinkABV(){
+        return Double.parseDouble(drinkABV);
+    }
+
+    public Double getDrinkVolume(){
+        return Double.parseDouble(drinkVolume);
     }
 }

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 
 /**
  * Created by Dan on 4/24/15.
@@ -231,20 +234,22 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
                     drinkFinishedYear = 0;
 
                     // create a new drink item
-                    startedDrink = new Drink(drinkName, drinkABV, drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
+                    startedDrink = new Drink(drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
                             drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
                 } else {
 
                     // create a new drink item
-                    startedDrink = new Drink(drinkName, drinkABV, drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
+                    startedDrink = new Drink(drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
                             drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
 
                 }
 
                 // add drink to arrayList and close dialog box
                 drinkLog.add(startedDrink);
+                Log.e("BAC", "Drink-ABV:"+ startedDrink.getDrinkABV() +"");
+                CalculatorManager.addDrinkToCalculation(startedDrink.getDrinkVolume(), startedDrink.getDrinkABV());
+                CalculatorManager.calculateCurrentBAC();
                 dismiss();
-
 
                 break;
             case R.id.drinkStartedTimeButton:

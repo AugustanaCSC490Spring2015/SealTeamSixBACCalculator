@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 
@@ -30,10 +32,18 @@ public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
 
+    TextView currentBAC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
+        CalculatorManager.loadBACPreferences();
+        CalculatorManager.weightInPounds = 220;
+
+        currentBAC = (TextView) findViewById(R.id.currentBACView);
 
         /**@TODO: code finish drink button
          */
@@ -75,6 +85,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        finishDrinkButton.setOnClickListener(new View.OnClickListener() {  // TODO: Change This; Right now it updates the BAC Calculation
+            @Override
+            public void onClick(View v) {
+
+                currentBAC.setText(Double.toString(CalculatorManager.calculateCurrentBAC()).substring(0,6)); // TODO: Create a timer that auto-updates the BAC Calculation
+            }
+        });
 
         //graph view
         // example data for testing
