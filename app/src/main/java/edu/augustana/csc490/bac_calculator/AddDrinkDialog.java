@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 
@@ -47,6 +48,9 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     private int drinkFinishedDay;
     private int drinkFinishedMonth;
     private int drinkFinishedYear;
+
+
+    //private Date drinkStarted;
 
     Drink startedDrink;
     ArrayList drinkLog = new ArrayList<Drink>();
