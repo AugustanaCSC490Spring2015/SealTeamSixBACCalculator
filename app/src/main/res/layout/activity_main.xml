@@ -11,17 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="@dimen/dashboard_button_height"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/sober_in"
-            android:id="@+id/textView"
             android:layout_weight="1"
-            android:textAlignment="gravity"
-            android:gravity="center"
             android:background="@drawable/dashboard_gradient"
-            android:padding="0dp" />
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/sober_in"
+                android:id="@+id/soberInLabel"
+
+                android:textAlignment="gravity"
+                android:gravity="center"
+
+                android:padding="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0:00"
+                android:id="@+id/sober_in_value" />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="1dp"
@@ -30,17 +46,31 @@
             android:padding="0dp"
             android:background="#ff598fa2" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="@dimen/dashboard_button_height"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/current_BAC"
-            android:id="@+id/currentBACView"
             android:layout_weight="1"
-            android:textAlignment="gravity"
-            android:gravity="center"
             android:background="@drawable/dashboard_gradient"
-            android:padding="0dp" />
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/current_BAC"
+                android:id="@+id/currentBACLabel"
+                android:textAlignment="gravity"
+                android:gravity="center"
+                android:padding="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0.00"
+                android:id="@+id/current_BAC_value" />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="1dp"
@@ -49,17 +79,33 @@
             android:background="#ff598fa2"
             android:padding="0dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="@dimen/dashboard_button_height"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/max_BAC"
-            android:id="@+id/textView3"
             android:layout_weight="1"
-            android:textAlignment="gravity"
-            android:gravity="center"
             android:background="@drawable/dashboard_gradient"
-            android:padding="0dp" />
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/max_BAC"
+                android:id="@+id/maxBACLabel"
+
+                android:textAlignment="gravity"
+                android:gravity="center"
+
+                android:padding="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0.00"
+                android:id="@+id/future_BAC_value" />
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
         CalculatorManager.loadBACPreferences();
         CalculatorManager.weightInPounds = 220;
 
-        currentBAC = (TextView) findViewById(R.id.currentBACView);
+        currentBAC = (TextView) findViewById(R.id.currentBACLabel);
 
         /**@TODO: code finish drink button
          */
@@ -117,9 +118,13 @@ public class MainActivity extends ActionBarActivity {
                 new DataPoint(exampleDates.get(4), 0.10),
                 new DataPoint(exampleDates.get(5), 0.11)
         });
+        series.setThickness(4);
+        int lineColor = Color.parseColor("#CC4040");
+        series.setColor(lineColor);
         graph.addSeries(series);
 
-        /**
+
+       /**
          * formattedDates is an ArrayList of the dates formatted to show just the
          * month, day, and time
          */
@@ -133,12 +138,12 @@ public class MainActivity extends ActionBarActivity {
          * including the date/time and the BAC value
          */
         ArrayList<String> RecentList = new ArrayList<String>();
-        RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
-        RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
-        RecentList.add(formattedDates.get(2) + "  -  " + "0.09");
-        RecentList.add(formattedDates.get(3) + "  -  " + "0.07");
-        RecentList.add(formattedDates.get(4) + "  -  " + "0.04");
-        RecentList.add(formattedDates.get(5) + "  -  " + "0.02");
+        RecentList.add(formattedDates.get(0) + "  -  " + "Drink #1");
+        RecentList.add(formattedDates.get(1) + "  -  " + "Drink #2");
+        RecentList.add(formattedDates.get(2) + "  -  " + "Drink #3");
+        RecentList.add(formattedDates.get(3) + "  -  " + "Drink #4");
+        RecentList.add(formattedDates.get(4) + "  -  " + "Drink #5");
+        RecentList.add(formattedDates.get(5) + "  -  " + "Drink 6");
 
 
         /** arrayAdapter adapts RecentList to the dashboard list view lv
@@ -161,8 +166,12 @@ public class MainActivity extends ActionBarActivity {
         graph.getViewport().setMaxX(exampleDates.get(4).getTime());
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinY(0.0);
-        graph.getViewport().setMaxY(0.3);
-        graph.getGridLabelRenderer().setNumVerticalLabels(4);
+        graph.getViewport().setMaxY(0.2); //increase if BAC exceeds ~.15 ??
+        graph.getGridLabelRenderer().setNumVerticalLabels(3);
+        graph.getGridLabelRenderer().setLabelsSpace(4);
+        graph.getGridLabelRenderer().setHorizontalLabelsColor(Color.parseColor("#aaaaaa"));
+        graph.getGridLabelRenderer().setVerticalLabelsColor(Color.parseColor("#aaaaaa"));
+
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
     }
