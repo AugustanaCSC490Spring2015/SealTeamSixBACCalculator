@@ -87,8 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/gender_text"
-            android:id="@+id/genderTextView"
+            android:text="@string/sex_text"
+            android:id="@+id/sexTextView"
             android:layout_row="5"
             android:layout_column="0"
             android:layout_marginLeft="10dp" />
@@ -139,7 +139,7 @@
         android:layout_marginLeft="10dp" />
 
     <RadioGroup
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_row="8"
         android:layout_column="0"
@@ -150,7 +150,8 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/foodInBellyLinearLayout">
+            android:id="@+id/foodInBellyLinearLayout"
+            android:layout_gravity="center_horizontal">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -158,25 +159,30 @@
                 android:text="@string/empty_text"
                 android:id="@+id/emptyRadioButton"
                 android:layout_row="9"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/running_low_text"
-                android:id="@+id/runningLowRadioButton" />
+                android:id="@+id/runningLowRadioButton"
+                android:layout_gravity="center_horizontal" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/satisfied_text"
+                android:id="@+id/satisfiedRadioButton"
+                android:layout_gravity="center_horizontal" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/full_text"
-                android:id="@+id/fullRadioButton" />
+                android:id="@+id/fullRadioButton"
+                android:layout_gravity="center_horizontal" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hate_myself_text"
-                android:id="@+id/overFullRadioButton" />
         </LinearLayout>
 
     </RadioGroup>
