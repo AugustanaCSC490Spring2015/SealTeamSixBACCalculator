@@ -88,8 +88,8 @@ public class MainActivity extends ActionBarActivity {
         finishDrinkButton.setOnClickListener(new View.OnClickListener() {  // TODO: Change This; Right now it updates the BAC Calculation
             @Override
             public void onClick(View v) {
-
-                currentBAC.setText(Double.toString(CalculatorManager.calculateCurrentBAC()).substring(0,6)); // TODO: Create a timer that auto-updates the BAC Calculation
+                // commenting out because clicking crashes the app
+                //currentBAC.setText(Double.toString(CalculatorManager.calculateCurrentBAC()).substring(0,6)); // TODO: Create a timer that auto-updates the BAC Calculation
             }
         });
 

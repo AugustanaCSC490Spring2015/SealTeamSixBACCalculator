@@ -43,7 +43,7 @@ public class UserSettingsActivity extends ActionBarActivity {
         weightTextView = (TextView) findViewById(R.id.weightTextView);
         lbsTextView = (TextView) findViewById(R.id.lbsTextView);
         lbsEditText = (EditText) findViewById(R.id.lbsEditText);
-        genderTextView = (TextView) findViewById(R.id.genderTextView);
+        genderTextView = (TextView) findViewById(R.id.sexTextView);
         maleRadioButton = (RadioButton) findViewById(R.id.maleRadioButton);
         femaleRadioButton = (RadioButton) findViewById(R.id.femaleRadioButton);
         aOFISTextView = (TextView) findViewById(R.id.aOFISTextView);
