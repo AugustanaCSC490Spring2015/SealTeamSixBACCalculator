@@ -19,14 +19,10 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
@@ -37,21 +33,17 @@ public class MainActivity extends ActionBarActivity {
     Button addDrinkButton, finishDrinkButton;
 
     TextView currentBAC;
-    TextView futureBAC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CalculatorManager.drinkLog = new ArrayList<Drink>();
-
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
-        CalculatorManager.weightInPounds = 220; // TODO: Implement User Settings
+        CalculatorManager.weightInPounds = 220;
 
         currentBAC = (TextView) findViewById(R.id.currentBACView);
-        futureBAC = (TextView) findViewById(R.id.maxBACLabel);
 
         /**@TODO: code finish drink button
          */
@@ -93,14 +85,11 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        // right now, this only does the calculations
         finishDrinkButton.setOnClickListener(new View.OnClickListener() {  // TODO: Change This; Right now it updates the BAC Calculation
             @Override
             public void onClick(View v) {
 
-            // TODO: Create a timer that auto-updates the BAC Calculation
-            CalculatorManager.finishDrink();
-
+                currentBAC.setText(Double.toString(CalculatorManager.calculateCurrentBAC()).substring(0,6)); // TODO: Create a timer that auto-updates the BAC Calculation
             }
         });
 
@@ -176,29 +165,6 @@ public class MainActivity extends ActionBarActivity {
         graph.getGridLabelRenderer().setNumVerticalLabels(4);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
-
-        TimerTask updateTimer = new TimerTask() {
-            @Override
-            public void run() {
-
-                CalculatorManager.calculateCurrentAndFutureBAC();
-
-                // http://stackoverflow.com/questions/18656813/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        NumberFormat formatter = new DecimalFormat("#0.0000");
-                        currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
-                        futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
-                    }
-                });
-            }
-        };
-
-        Timer timer = new Timer("UpdateTimer");
-
-        timer.scheduleAtFixedRate(updateTimer, 30, 5000);
-
     }
 
     @Override

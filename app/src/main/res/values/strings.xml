@@ -19,9 +19,9 @@
     <string name="finish_drink_checkbox_label">Finish drink using menu button</string>
     <string name="drink_end_time_label">Finished Drink</string>
     <string name="add_drink_button">ADD DRINK</string>
-    <string name="sober_in">SOBER IN: 0.00</string>
-    <string name="current_BAC">0.00</string>
-    <string name="max_BAC">0.00</string>
+    <string name="sober_in">SOBER IN:</string>
+    <string name="current_BAC">CURRENT BAC:</string>
+    <string name="max_BAC">FUTURE BAC:</string>
     <string name="finish_drink">FINISH DRINK</string>
     <string name="choose_option">Choose and Option</string>
     <string name="history_label">YOUR HISTORY:</string>
@@ -30,14 +30,14 @@
     <string name="inches_text">Inches:</string>
     <string name="weight_text">Weight</string>
     <string name="lbs_text">Pounds:</string>
-    <string name="gender_text">Gender</string>
     <string name="male_text">Male</string>
     <string name="female_text">Female</string>
     <string name="food_amount_text">Amount of food in stomach</string>
     <string name="empty_text">Empty</string>
     <string name="full_text">Full</string>
-    <string name="hate_myself_text">I hate myself</string>
     <string name="running_low_text">Running low</string>
     <string name="save_text">Save</string>
     <string name="cancel_text">Cancel</string>
+    <string name="satisfied_text">Satisfied</string>
+    <string name="sex_text">Sex</string>
 </resources>
