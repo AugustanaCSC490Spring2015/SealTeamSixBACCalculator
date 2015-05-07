@@ -13,6 +13,7 @@ public class Constants {
     // Preferences
     public static final String PREF_FILE = "SealTeamSixBACCalc";
     public static final String PREF_UNTAPPD_TOKEN = "token";
+    public static final String PREF_RATE_LIMIT_REMAINING = "rateLimitRemaining";
     public static final String PREF_USER_FIRST_NAME = "firstName";
     public static final String PREF_USER_LAST_NAME = "lastName";
     public static final String PREF_USER_USERNAME = "username";

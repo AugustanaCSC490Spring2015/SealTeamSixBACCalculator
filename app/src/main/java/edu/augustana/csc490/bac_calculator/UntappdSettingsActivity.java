@@ -134,7 +134,9 @@ public class UntappdSettingsActivity extends ActionBarActivity {
         String last_name = sharedPreferences.getString(Constants.PREF_USER_LAST_NAME, "");
         String user_name = sharedPreferences.getString(Constants.PREF_USER_USERNAME, "");
 
-        String userInfo = "Logged in as " + first_name + " " + last_name + " (" + user_name +")";
+        String userInfo = "Logged in as " + first_name + " " + last_name + " (" + user_name +") " +
+                "\nUntappd API Hourly Call Rate Limit Remaining: " + sharedPreferences.getString(Constants.PREF_RATE_LIMIT_REMAINING,"?") + "/100";
+
         untappdUserInfo.setText(userInfo);
     }
 
@@ -157,7 +159,7 @@ public class UntappdSettingsActivity extends ActionBarActivity {
 
         @Override
         protected JSONObject doInBackground(String... args) {
-            GetJSON jsonParser = new GetJSON();
+            GetJSON jsonParser = new GetJSON(UntappdSettingsActivity.this);
             JSONObject jsonObject = jsonParser.getUserInfo(token, true);
             return jsonObject;
         }

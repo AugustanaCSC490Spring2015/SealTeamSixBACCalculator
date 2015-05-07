@@ -1,5 +1,7 @@
 package edu.augustana.csc490.bac_calculator.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -18,8 +20,11 @@ import java.net.URLConnection;
  */
 public class GetJSON {
 
-    public GetJSON(){
+    SharedPreferences sharedPreferences;
 
+    public GetJSON(Context context){
+        // load preferences
+        sharedPreferences = context.getSharedPreferences(Constants.PREF_FILE, context.MODE_PRIVATE);
     }
 
     public JSONObject getUserInfo(String username, String token, Boolean compact) {
@@ -66,6 +71,8 @@ public class GetJSON {
             URL url = new URL(urlString);
             URLConnection urlConnection = url.openConnection();
             urlConnection.connect();
+            // Store rate limit remainging in prefs
+            sharedPreferences.edit().putString(Constants.PREF_RATE_LIMIT_REMAINING, urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT_REMAINING)).commit();
             Log.i("RateLimit", "Rate Limit Remaining: "+ urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT_REMAINING) + "/" + urlConnection.getHeaderField(Constants.HEADER_RATE_LIMIT));
             is = urlConnection.getInputStream();
 
