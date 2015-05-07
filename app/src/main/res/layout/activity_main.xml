@@ -54,7 +54,7 @@
             android:layout_height="@dimen/dashboard_button_height"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/max_BAC"
-            android:id="@+id/textView3"
+            android:id="@+id/futureBACView"
             android:layout_weight="1"
             android:textAlignment="gravity"
             android:gravity="center"

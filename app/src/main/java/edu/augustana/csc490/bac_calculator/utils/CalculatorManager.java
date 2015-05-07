@@ -189,6 +189,9 @@ public class CalculatorManager {
         weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "0.0"));  // default value of 0.0
         totalHoursSinceFirstDrink = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_HOURS, "0.0"));  // default value of 0.0
         averageAlcoholEliminationRate = Double.parseDouble(savedPreferences.getString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, "0.015")); // default value of 0.015 (average)
+
+        drinkLog = new ArrayList<>();
+
         //drinkLog = savedPreferences.getAll(Constants.PREF_DRINK_LOG, new Drink());  --Need to implement Gson code
     }
 
