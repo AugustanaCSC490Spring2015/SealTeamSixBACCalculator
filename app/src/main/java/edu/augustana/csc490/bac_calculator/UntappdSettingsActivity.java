@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
@@ -109,6 +110,12 @@ public class UntappdSettingsActivity extends ActionBarActivity {
 
                                 // close dialog
                                 dialog.dismiss();
+                            } else if (url.toLowerCase().contains(Constants.REDIRECT_URL) && sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null) {
+                                // Redirected to redirect url without token
+                                Log.wtf("Bad Redirect from Untappd: ", url);
+                                // Ask user to try again and close the webview dialog
+                                dialog.dismiss();
+                                Toast.makeText(UntappdSettingsActivity.this, R.string.try_again, Toast.LENGTH_SHORT).show();
                             }
                         }
 
