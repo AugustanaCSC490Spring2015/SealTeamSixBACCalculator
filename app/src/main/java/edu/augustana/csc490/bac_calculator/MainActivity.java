@@ -213,6 +213,9 @@ public class MainActivity extends ActionBarActivity {
                 Intent untappdSettingsIntent = new Intent(this, UntappdSettingsActivity.class);
                 startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true; // return true to close menu
             default:
                 return super.onOptionsItemSelected(item);
         }
