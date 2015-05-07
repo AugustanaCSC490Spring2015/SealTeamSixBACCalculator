@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,14 +46,13 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     private int drinkFinishedDay;
     private int drinkFinishedMonth;
     private int drinkFinishedYear;
+    private Calendar drinkStarted;
+    private Calendar drinkEnded;
 
 
     //private Date drinkStarted;
 
     Drink startedDrink;
-    ArrayList drinkLog = new ArrayList<Drink>();
-
-
 
     public AddDrinkDialog(Context context) {
         super(context);
@@ -118,6 +115,8 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
 
         // get calendar and current time and date
         final Calendar calendar = Calendar.getInstance();
+        drinkStarted = Calendar.getInstance();
+        drinkEnded = Calendar.getInstance();
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH) + 1; // months 0-11
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -229,30 +228,29 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
 
                 // test for if checkbox is checked or not
                 if (drinkFinishedCheckBox.isChecked()){
-
                     // initialized to zero to avoid null pointer...
                     drinkFinishedHour = 0;
                     drinkFinishedMinute = 0;
                     drinkFinishedDay = 0;
                     drinkFinishedMonth = 0;
                     drinkFinishedYear = 0;
-
-                    // create a new drink item
-                    startedDrink = new Drink(drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
-                            drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
-                } else {
-
-                    // create a new drink item
-                    startedDrink = new Drink(drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStartedHour, drinkStartedMinute, drinkStartedDay, drinkStartedMonth,
-                            drinkStartedYear, drinkFinishedHour, drinkFinishedMinute, drinkFinishedDay, drinkFinishedMonth, drinkFinishedYear);
-
                 }
 
+                // there is an issue with saving the year - it only saves them as years after 1900
+                drinkStarted.set(Calendar.YEAR, drinkStartedYear);
+                drinkStarted.set(Calendar.MONTH, drinkStartedMonth - 1);
+                drinkStarted.set(Calendar.DAY_OF_MONTH, drinkStartedDay);
+                drinkStarted.set(Calendar.HOUR_OF_DAY, drinkStartedHour);
+                drinkStarted.set(Calendar.MINUTE, drinkStartedMinute);
+
+                drinkEnded.set(drinkFinishedYear + 1900, drinkFinishedMonth - 1, drinkFinishedDay, drinkFinishedHour, drinkFinishedMinute);
+
+                // create a new drink item
+                startedDrink = new Drink (drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStarted, drinkEnded);
+
                 // add drink to arrayList and close dialog box
-                drinkLog.add(startedDrink);
-                Log.e("BAC", "Drink-ABV:"+ startedDrink.getDrinkABV() +"");
-                CalculatorManager.addDrinkToCalculation(startedDrink.getDrinkVolume(), startedDrink.getDrinkABV());
-                CalculatorManager.calculateCurrentBAC();
+                CalculatorManager.drinkLog.add(startedDrink);
+
                 dismiss();
 
                 break;

@@ -21,6 +21,7 @@ public class Constants {
     public static final String PREF_WEIGHT = "weight";
     public static final String PREF_TOTAL_HOURS = "totalHours";
     public static final String PREF_AVG_ALC_ELIMINATION_RATE = "averageAlcoholEliminationRate";
+    public static final String PREF_DRINK_LOG = "drinkLog";
 
     // JSON TAGS
     public static final String TAG_RESPONSE = "response";
