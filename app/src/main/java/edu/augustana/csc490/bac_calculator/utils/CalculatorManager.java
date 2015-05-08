@@ -3,6 +3,11 @@ package edu.augustana.csc490.bac_calculator.utils;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -61,8 +66,8 @@ public class CalculatorManager {
     // Will be called to get a "future" BAC, assuming the current drink will take 1 hour to drink; Future BAC will be a linear consumption of current drink.
     public static void calculateCurrentAndFutureBAC(){
 
-        // prevents null pointers if there are no drinks entered yet
-        if(drinkLog.size() ==0){
+        // prevents IndexOUtOfBounds if there are no drinks entered yet
+        if(drinkLog.size() == 0){
             currentBAC = 0.0;
             futureBAC = 0.0;
             return;
@@ -190,17 +195,33 @@ public class CalculatorManager {
         totalHoursSinceFirstDrink = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_HOURS, "0.0"));  // default value of 0.0
         averageAlcoholEliminationRate = Double.parseDouble(savedPreferences.getString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, "0.015")); // default value of 0.015 (average)
 
-        drinkLog = new ArrayList<>();
-
-        //drinkLog = savedPreferences.getAll(Constants.PREF_DRINK_LOG, new Drink());  --Need to implement Gson code
+        drinkLog = new ArrayList<Drink>();
+        int drinkSize = savedPreferences.getInt(Constants.PREF_DRINK_LOG_SIZE, 0);
+        for (int i = 0; i<drinkSize; i++){
+            String json = savedPreferences.getString("SavedDrink" + i, "");
+            Gson gson = new Gson();
+            Drink d = gson.fromJson(json, Drink.class);
+            drinkLog.add(d);
+        }
     }
 
     public static void saveBACPreferences(){
-        savedPreferences.edit().putString(Constants.PREF_TOTAL_ALCOHOL, Double.toString(totalAlcoholWithWidmark));
-        savedPreferences.edit().putBoolean(Constants.PREF_GENDER, isMale);
-        savedPreferences.edit().putString(Constants.PREF_WEIGHT, Double.toString(weightInPounds));
-        savedPreferences.edit().putString(Constants.PREF_TOTAL_HOURS, Double.toString(totalHoursSinceFirstDrink));
-        savedPreferences.edit().putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, Double.toString(averageAlcoholEliminationRate));
+        SharedPreferences.Editor saver = savedPreferences.edit();
+        saver.putString(Constants.PREF_TOTAL_ALCOHOL, Double.toString(totalAlcoholWithWidmark));
+        saver.putBoolean(Constants.PREF_GENDER, isMale);
+        saver.putString(Constants.PREF_WEIGHT, Double.toString(weightInPounds));
+        saver.putString(Constants.PREF_TOTAL_HOURS, Double.toString(totalHoursSinceFirstDrink));
+        saver.putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, Double.toString(averageAlcoholEliminationRate));
+
+        // save each object in the drinkLog
+        saver.putInt(Constants.PREF_DRINK_LOG_SIZE, drinkLog.size());
+        Gson gson = new Gson();
+        for(int i=0; i<drinkLog.size(); i++){
+            String json = gson.toJson(drinkLog.get(i));
+            saver.putString("SavedDrink" + i, json);
+        }
+
+        saver.commit();
     }
 
     public static void removeDrink(int id){
