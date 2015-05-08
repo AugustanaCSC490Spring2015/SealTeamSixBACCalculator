@@ -17,14 +17,11 @@ public class Constants {
     public static final String PREF_USER_FIRST_NAME = "firstName";
     public static final String PREF_USER_LAST_NAME = "lastName";
     public static final String PREF_USER_USERNAME = "username";
-    public static final String PREF_TOTAL_ALCOHOL = "totalAlcohol";
     public static final String PREF_GENDER = "gender";
     public static final String PREF_WEIGHT = "weight";
-    public static final String PREF_TOTAL_HOURS = "totalHours";
-    public static final String PREF_AVG_ALC_ELIMINATION_RATE = "averageAlcoholEliminationRate";
     public static final String PREF_DRINK_LOG = "drinkLog";
     public static final String PREF_DRINK_LOG_SIZE = "drinkLogSize";
-    public static final String PREF_DRINK = "drink";
+    public static final String PREF_HOW_MUCH_ATE = "howMuchAte";
 
     // JSON TAGS
     public static final String TAG_RESPONSE = "response";

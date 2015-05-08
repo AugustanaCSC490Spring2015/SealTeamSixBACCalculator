@@ -4,12 +4,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 import edu.augustana.csc490.bac_calculator.Drink;
 
@@ -24,45 +22,14 @@ public class CalculatorManager {
     private static boolean isMale;
     private static double currentBAC;
     private static double futureBAC;
-    private static Calendar futureBACTime;
+    private static Calendar futureMaxBACTime;
+    private static Calendar futureSoberTime;
 
     public static ArrayList<Drink> drinkLog;
+    public static Map<Calendar, Double> BACHistory;
 
     // SharedPreferences stuff
     public static SharedPreferences savedPreferences;
-
-    // Will be only called when "Finish Drink" is tapped
-    public static void calculateCurrentBAC() {
-
-        /**
-         * Widmark Formula:
-         * A = (Wr(Ct+Bt))/(0.8z)  (Solve for Ct)
-         *
-         * A: number of drinks consumed
-         * W: body weight (ounces)
-         * r: body water distribution constant (L/Kg)
-         * Ct: BAC (Kg/L)
-         * B: alcohol elimination rate (Kg/L/hr)
-         * t: time since first drink (hours)
-         * 0.8: Widmark's constant
-         * z: fluid ounces of alcohol/drink
-         */
-
-        // pull drinks from arraylist and re-calculate:
-        totalAlcoholWithWidmark = 0.0;
-        for (int i=0; i<drinkLog.size(); i++){
-            totalAlcoholWithWidmark += (drinkLog.get(i).getDrinkABV() * Constants.WIDMARKS_CONSTANT) * (drinkLog.get(i).getDrinkVolume() * 1.0);  //calculate Alcohol Volume and add to total
-        }
-
-        double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        Log.e("BAC", "BODYWATER:" + bodyWater);
-        double alcoholElimination = (averageAlcoholEliminationRate / Constants.GRAMS_IN_KILOGRAMS) * totalHoursSinceFirstDrink;
-        currentBAC = totalAlcoholWithWidmark / bodyWater;
-        currentBAC = currentBAC - alcoholElimination;
-        Log.e("BAC", "Current BAC:" + Double.toString(CalculatorManager.currentBAC));
-        saveBACPreferences();
-
-    }
 
     // Will be called to get a "future" BAC, assuming the current drink will take 1 hour to drink; Future BAC will be a linear consumption of current drink.
     public static void calculateCurrentAndFutureBAC(){
@@ -144,14 +111,14 @@ public class CalculatorManager {
 
             // calculate future BAC time:
             long futureTime = latestDrinkTimeInMS + 3600000;
-            futureBACTime = Calendar.getInstance();
-            futureBACTime.setTimeInMillis(futureTime);
+            futureMaxBACTime = Calendar.getInstance();
+            futureMaxBACTime.setTimeInMillis(futureTime);
 
         } else {
 
             // just set it to the current BAC and Current time
             futureBAC = currentBAC;
-            futureBACTime.setTimeInMillis(latestDrinkTimeInMS);
+            futureMaxBACTime.setTimeInMillis(latestDrinkTimeInMS);
         }
     }
 
@@ -179,6 +146,19 @@ public class CalculatorManager {
         }
     }
 
+    private static void calculateFutureSoberTime(){
+
+    }
+
+    private static void calculateBACHistory(){
+        // get current time for calculations
+        Calendar currentTimeCalendar = Calendar.getInstance();
+        currentTimeCalendar.setTimeInMillis(currentTimeCalendar.getTimeInMillis());
+
+        BACHistory.put(currentTimeCalendar, currentBAC);
+
+    }
+
     // Gets body water distribution that depends on male/female
     private static double getWaterConstant(){
         if(isMale){
@@ -191,11 +171,12 @@ public class CalculatorManager {
     public static void loadBACPreferences(){
         isMale = savedPreferences.getBoolean(Constants.PREF_GENDER, true); // default value of "Male"
         weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "0.0"));  // default value of 0.0
+        howMuchAte = savedPreferences.getInt(Constants.PREF_HOW_MUCH_ATE, 0);
 
         drinkLog = new ArrayList<Drink>();
         int drinkSize = savedPreferences.getInt(Constants.PREF_DRINK_LOG_SIZE, 0);
         for (int i = 0; i<drinkSize; i++){
-            String json = savedPreferences.getString("SavedDrink" + i, "");
+            String json = savedPreferences.getString(Constants.PREF_DRINK_LOG + i, "");
             Gson gson = new Gson();
             Drink d = gson.fromJson(json, Drink.class);
             drinkLog.add(d);
@@ -206,6 +187,7 @@ public class CalculatorManager {
         SharedPreferences.Editor saver = savedPreferences.edit();
         saver.putBoolean(Constants.PREF_GENDER, isMale);
         saver.putString(Constants.PREF_WEIGHT, Double.toString(weightInPounds));
+        saver.putInt(Constants.PREF_HOW_MUCH_ATE, howMuchAte);
 
         // save each object in the drinkLog
         // http://stackoverflow.com/questions/9186806/gson-turn-an-array-of-data-objects-into-json-android/9198626#9198626
@@ -213,19 +195,26 @@ public class CalculatorManager {
         Gson gson = new Gson();
         for(int i=0; i<drinkLog.size(); i++){
             String json = gson.toJson(drinkLog.get(i));
-            saver.putString("SavedDrink" + i, json);
+            saver.putString(Constants.PREF_DRINK_LOG + i, json);
         }
 
         saver.commit();
     }
 
-    public static double getAverageAlcoholEliminationRate(){
+    public static void calculateAverageAlcoholEliminationRate(){
         //http://www.alcohol.vt.edu/Students/Alcohol_effects/Intox_factors/index.html
-
-
-
-        return 00.00;
+        averageAlcoholEliminationRate = averageAlcoholEliminationRate;
     }
+
+    public static double getAverageAlcoholEliminationRate(){
+
+        return averageAlcoholEliminationRate;
+    }
+
+    public static void deleteAllDrinks(){
+        drinkLog = new ArrayList<>();
+    }
+
     public static void removeDrink(int id){
         drinkLog.remove(id);
     }
