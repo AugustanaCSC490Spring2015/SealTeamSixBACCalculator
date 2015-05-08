@@ -197,7 +197,6 @@ public class CalculatorManager {
             String json = gson.toJson(drinkLog.get(i));
             saver.putString(Constants.PREF_DRINK_LOG + i, json);
         }
-
         saver.commit();
     }
 
@@ -219,6 +218,18 @@ public class CalculatorManager {
         drinkLog.remove(id);
     }
 
+    public static void setIsMale(boolean b){
+        isMale = b;
+    }
+
+    public static boolean getIsMale(){
+        return isMale;
+    }
+
+    public static void setWeightInPounds(double weight){
+        weightInPounds = weight;
+    }
+
     public static double getCurrentBAC(){
         return currentBAC;
     }
@@ -227,6 +238,13 @@ public class CalculatorManager {
         return futureBAC;
     }
 
+    /**
+     * 0 - none
+     * 1 - a little
+     * 2 - some
+     * 3 - a lot
+     * @param i - passed in from user settings
+     */
     public static void setHowMuchAte(int i){
         howMuchAte = i;
     }

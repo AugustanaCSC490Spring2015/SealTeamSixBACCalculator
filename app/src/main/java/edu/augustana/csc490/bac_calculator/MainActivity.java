@@ -52,8 +52,6 @@ public class MainActivity extends ActionBarActivity {
         futureBAC = (TextView) findViewById(R.id.futureBACView);
         drinkListView = (ListView) findViewById(R.id.drinkListView);
 
-        /**@TODO: code finish drink button
-         */
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
@@ -197,7 +195,6 @@ public class MainActivity extends ActionBarActivity {
 
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
-
     }
 
     @Override
