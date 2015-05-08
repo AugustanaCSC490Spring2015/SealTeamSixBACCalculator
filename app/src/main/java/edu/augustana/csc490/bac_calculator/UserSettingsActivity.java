@@ -4,9 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import edu.augustana.csc490.bac_calculator.utils.Constants;
@@ -16,11 +18,6 @@ import edu.augustana.csc490.bac_calculator.utils.Constants;
  */
 public class UserSettingsActivity extends ActionBarActivity {
 
-    private TextView heightTextView;
-    private TextView feetTextView;
-    private EditText feetEditText;
-    private TextView inchesTextView;
-    private EditText inchesEditText;
     private TextView weightTextView;
     private TextView lbsTextView;
     private EditText lbsEditText;
@@ -34,6 +31,8 @@ public class UserSettingsActivity extends ActionBarActivity {
     private RadioButton fullRadioButton;
     private SharedPreferences sharedPreferences;
     private Button saveButton;
+    private RadioGroup sexRadioGroup;
+    private RadioGroup fullnessRadioGroup;
 
 
     @Override
@@ -41,20 +40,15 @@ public class UserSettingsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
 
-
-
-        heightTextView = (TextView) findViewById(R.id.heightTextView);
-        feetTextView = (TextView) findViewById(R.id.feetTextView);
-        feetEditText = (EditText) findViewById(R.id.feetEditText);
-        inchesTextView = (TextView) findViewById(R.id.inchesTextView);
-        inchesEditText = (EditText) findViewById(R.id.inchesEditText);
         weightTextView = (TextView) findViewById(R.id.weightTextView);
         lbsTextView = (TextView) findViewById(R.id.lbsTextView);
         lbsEditText = (EditText) findViewById(R.id.lbsEditText);
         genderTextView = (TextView) findViewById(R.id.sexTextView);
+        sexRadioGroup = (RadioGroup) findViewById(R.id.genderRadioGroup);
         maleRadioButton = (RadioButton) findViewById(R.id.maleRadioButton);
         femaleRadioButton = (RadioButton) findViewById(R.id.femaleRadioButton);
         aOFISTextView = (TextView) findViewById(R.id.aOFISTextView);
+        fullnessRadioGroup = (RadioGroup) findViewById((R.id.foodInBellyRadiogroup));
         emptyRadioButton = (RadioButton) findViewById(R.id.emptyRadioButton);
         runningLowRadioButton = (RadioButton) findViewById(R.id.runningLowRadioButton);
         satisfiedRadioButton = (RadioButton) findViewById(R.id.satisfiedRadioButton);
@@ -71,5 +65,15 @@ public class UserSettingsActivity extends ActionBarActivity {
         // Set the up arrow in the ActionBar to the home screen
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        //Todo add functionality to the save button (may need help as I don't know how to work with preferences)
+        /*saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.commit();
+            }
+        });
+        */
     }
 }
