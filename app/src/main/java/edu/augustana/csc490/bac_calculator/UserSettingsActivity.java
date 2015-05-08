@@ -1,11 +1,15 @@
 package edu.augustana.csc490.bac_calculator;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 /**
  * Created by Dan on 4/29/15.
@@ -28,12 +32,16 @@ public class UserSettingsActivity extends ActionBarActivity {
     private RadioButton runningLowRadioButton;
     private RadioButton satisfiedRadioButton;
     private RadioButton fullRadioButton;
+    private SharedPreferences sharedPreferences;
+    private Button saveButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
+
+
 
         heightTextView = (TextView) findViewById(R.id.heightTextView);
         feetTextView = (TextView) findViewById(R.id.feetTextView);
@@ -51,8 +59,13 @@ public class UserSettingsActivity extends ActionBarActivity {
         runningLowRadioButton = (RadioButton) findViewById(R.id.runningLowRadioButton);
         satisfiedRadioButton = (RadioButton) findViewById(R.id.satisfiedRadioButton);
         fullRadioButton = (RadioButton) findViewById(R.id.fullRadioButton);
+        saveButton = (Button) findViewById(R.id.saveButton);
 
-
+        sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //editor.putBoolean(Constants.PREF_GENDER, );
+        //editor.putString();
+        editor.commit();
 
         // Set the up arrow in the ActionBar to the home screen
         ActionBar actionBar = getSupportActionBar();
