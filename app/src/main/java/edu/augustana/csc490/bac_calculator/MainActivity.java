@@ -12,12 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -26,18 +24,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 import edu.augustana.csc490.bac_calculator.utils.DrinkListArrayAdapter;
-
-
 public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
-
     TextView currentBAC, futureBAC;
-
     ListView drinkListView;
 
     @Override
@@ -48,14 +41,12 @@ public class MainActivity extends ActionBarActivity {
         CalculatorManager.loadBACPreferences();
         CalculatorManager.weightInPounds = 220;
 
-        currentBAC = (TextView) findViewById(R.id.currentBACView);
-        futureBAC = (TextView) findViewById(R.id.futureBACView);
+        currentBAC = (TextView) findViewById(R.id.current_BAC_value);
+        futureBAC = (TextView) findViewById(R.id.future_BAC_value);
         drinkListView = (ListView) findViewById(R.id.drinkListView);
-
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
-
         addDrinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,20 +117,22 @@ public class MainActivity extends ActionBarActivity {
                 new DataPoint(exampleDates.get(5), 0.11)
         });
         graph.addSeries(series);
+        series.setColor(getResources().getColor(R.color.graph_line_color));
 
-        /**
+
+       /* *//**
          * formattedDates is an ArrayList of the dates formatted to show just the
          * month, day, and time
-         */
+         *//*
         ArrayList<String> formattedDates = new ArrayList<String>();
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd hh:mm a");
         for (int i = 0; i < 6; i++) {
             formattedDates.add(formatter.format(exampleDates.get(i)));
         }
 
-        /** ArrayList RecentList contains the # most recent entries as strings,
+        *//** ArrayList RecentList contains the # most recent entries as strings,
          * including the date/time and the BAC value
-         */
+         *//*
         ArrayList<String> RecentList = new ArrayList<String>();
         RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
         RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
@@ -149,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
         RecentList.add(formattedDates.get(5) + "  -  " + "0.02");
 
 
-        /** arrayAdapter adapts RecentList to the dashboard list view lv
+        *//** arrayAdapter adapts RecentList to the dashboard list view lv
 
         ListView lv = (ListView) findViewById(R.id.drinkListView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
