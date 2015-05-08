@@ -30,6 +30,7 @@ import java.util.TimerTask;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
+import edu.augustana.csc490.bac_calculator.utils.DrinkListArrayAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -37,6 +38,8 @@ public class MainActivity extends ActionBarActivity {
     Button addDrinkButton, finishDrinkButton;
 
     TextView currentBAC, futureBAC;
+
+    ListView drinkListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
 
         currentBAC = (TextView) findViewById(R.id.currentBACView);
         futureBAC = (TextView) findViewById(R.id.futureBACView);
+        drinkListView = (ListView) findViewById(R.id.drinkListView);
 
         /**@TODO: code finish drink button
          */
@@ -96,6 +100,9 @@ public class MainActivity extends ActionBarActivity {
                CalculatorManager.finishDrink();
             }
         });
+
+        final DrinkListArrayAdapter adapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
+        drinkListView.setAdapter(adapter);
 
         //graph view
         // example data for testing
@@ -146,15 +153,16 @@ public class MainActivity extends ActionBarActivity {
 
 
         /** arrayAdapter adapts RecentList to the dashboard list view lv
-         */
-        ListView lv = (ListView) findViewById(R.id.listView);
+
+        ListView lv = (ListView) findViewById(R.id.drinkListView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.dashboard_list_item,
                 RecentList);
 
         lv.setAdapter(arrayAdapter);
-
+        */
+        
         // set date x-axis label formatter
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, dateFormat));

@@ -242,7 +242,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
                 drinkEnded.set(drinkFinishedYear + 1900, drinkFinishedMonth - 1, drinkFinishedDay, drinkFinishedHour, drinkFinishedMinute);
 
                 // create a new drink item
-                startedDrink = new Drink (drinkName, drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStarted, drinkEnded);
+                startedDrink = new Drink (drinkNameEditText.getText().toString(), drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStarted, drinkEnded);
 
                 // add drink to arrayList and close dialog box
                 CalculatorManager.drinkLog.add(startedDrink);

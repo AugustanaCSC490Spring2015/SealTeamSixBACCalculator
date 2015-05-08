@@ -20,6 +20,7 @@ public class CalculatorManager {
     public static double weightInPounds;
     private static double totalHoursSinceFirstDrink;
     private static double averageAlcoholEliminationRate;  // avg. is 0.015
+    private static int howMuchAte;
     private static boolean isMale;
     private static double currentBAC;
     private static double futureBAC;
@@ -152,7 +153,6 @@ public class CalculatorManager {
             futureBAC = currentBAC;
             futureBACTime.setTimeInMillis(latestDrinkTimeInMS);
         }
-
     }
 
     public static boolean finishDrink(){
@@ -189,11 +189,8 @@ public class CalculatorManager {
     }
 
     public static void loadBACPreferences(){
-        totalAlcoholWithWidmark = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_ALCOHOL, "0.0"));  // default value of 0.0
         isMale = savedPreferences.getBoolean(Constants.PREF_GENDER, true); // default value of "Male"
         weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "0.0"));  // default value of 0.0
-        totalHoursSinceFirstDrink = Double.parseDouble(savedPreferences.getString(Constants.PREF_TOTAL_HOURS, "0.0"));  // default value of 0.0
-        averageAlcoholEliminationRate = Double.parseDouble(savedPreferences.getString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, "0.015")); // default value of 0.015 (average)
 
         drinkLog = new ArrayList<Drink>();
         int drinkSize = savedPreferences.getInt(Constants.PREF_DRINK_LOG_SIZE, 0);
@@ -207,13 +204,11 @@ public class CalculatorManager {
 
     public static void saveBACPreferences(){
         SharedPreferences.Editor saver = savedPreferences.edit();
-        saver.putString(Constants.PREF_TOTAL_ALCOHOL, Double.toString(totalAlcoholWithWidmark));
         saver.putBoolean(Constants.PREF_GENDER, isMale);
         saver.putString(Constants.PREF_WEIGHT, Double.toString(weightInPounds));
-        saver.putString(Constants.PREF_TOTAL_HOURS, Double.toString(totalHoursSinceFirstDrink));
-        saver.putString(Constants.PREF_AVG_ALC_ELIMINATION_RATE, Double.toString(averageAlcoholEliminationRate));
 
         // save each object in the drinkLog
+        // http://stackoverflow.com/questions/9186806/gson-turn-an-array-of-data-objects-into-json-android/9198626#9198626
         saver.putInt(Constants.PREF_DRINK_LOG_SIZE, drinkLog.size());
         Gson gson = new Gson();
         for(int i=0; i<drinkLog.size(); i++){
@@ -224,6 +219,13 @@ public class CalculatorManager {
         saver.commit();
     }
 
+    public static double getAverageAlcoholEliminationRate(){
+        //http://www.alcohol.vt.edu/Students/Alcohol_effects/Intox_factors/index.html
+
+
+
+        return 00.00;
+    }
     public static void removeDrink(int id){
         drinkLog.remove(id);
     }
@@ -236,6 +238,12 @@ public class CalculatorManager {
         return futureBAC;
     }
 
+    public static void setHowMuchAte(int i){
+        howMuchAte = i;
+    }
 
+    public static int getHowMuchAte(){
+        return howMuchAte;
+    }
 
 }
