@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,34 +18,40 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
+import edu.augustana.csc490.bac_calculator.utils.DrinkListArrayAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
 
-    TextView currentBAC;
+    TextView currentBAC, futureBAC;
+
+    ListView drinkListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
         CalculatorManager.weightInPounds = 220;
 
         currentBAC = (TextView) findViewById(R.id.currentBACView);
+        futureBAC = (TextView) findViewById(R.id.futureBACView);
+        drinkListView = (ListView) findViewById(R.id.drinkListView);
 
-        /**@TODO: code finish drink button
-         */
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
@@ -88,10 +93,13 @@ public class MainActivity extends ActionBarActivity {
         finishDrinkButton.setOnClickListener(new View.OnClickListener() {  // TODO: Change This; Right now it updates the BAC Calculation
             @Override
             public void onClick(View v) {
-                // commenting out because clicking crashes the app
-                //currentBAC.setText(Double.toString(CalculatorManager.calculateCurrentBAC()).substring(0,6)); // TODO: Create a timer that auto-updates the BAC Calculation
+
+               CalculatorManager.finishDrink();
             }
         });
+
+        final DrinkListArrayAdapter adapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
+        drinkListView.setAdapter(adapter);
 
         //graph view
         // example data for testing
@@ -142,14 +150,15 @@ public class MainActivity extends ActionBarActivity {
 
 
         /** arrayAdapter adapts RecentList to the dashboard list view lv
-         */
-        ListView lv = (ListView) findViewById(R.id.listView);
+
+        ListView lv = (ListView) findViewById(R.id.drinkListView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.dashboard_list_item,
                 RecentList);
 
         lv.setAdapter(arrayAdapter);
+        */
 
         // set date x-axis label formatter
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -165,6 +174,27 @@ public class MainActivity extends ActionBarActivity {
         graph.getGridLabelRenderer().setNumVerticalLabels(4);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
+
+        TimerTask updateBAC = new TimerTask() {
+            @Override
+            public void run() {
+                CalculatorManager.calculateCurrentAndFutureBAC();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // http://stackoverflow.com/questions/12806278/double-decimal-formatting-in-java
+                        NumberFormat formatter = new DecimalFormat("#0.0000");
+                        currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
+                        futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
+                    }
+                });
+
+            }
+        };
+
+        Timer timer = new Timer("Update BAC");
+        timer.scheduleAtFixedRate(updateBAC, 30, 5000);
     }
 
     @Override
@@ -185,6 +215,9 @@ public class MainActivity extends ActionBarActivity {
             case R.id.untappd_settings:
                 Intent untappdSettingsIntent = new Intent(this, UntappdSettingsActivity.class);
                 startActivity(untappdSettingsIntent);
+                return true; // return true to close menu
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
                 return true; // return true to close menu
             default:
                 return super.onOptionsItemSelected(item);

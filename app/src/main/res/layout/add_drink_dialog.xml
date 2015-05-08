@@ -65,21 +65,23 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/drink_start_time_label"
             android:id="@+id/drinkStartedLabel"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentRight="false" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="11:11 PM"
             android:id="@+id/drinkStartedTimeButton"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/drinkStartedLabel" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="12/15/2015"
             android:id="@+id/drinkStartedDateButton"
-            android:layout_toLeftOf="@+id/drinkStartedTimeButton" />
+            android:layout_toLeftOf="@+id/drinkStartedTimeButton"
+            android:layout_below="@+id/drinkStartedLabel" />
 
     </RelativeLayout>
 
@@ -95,22 +97,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/drinkFinishedLayout" >
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="11:26 PM"
-            android:id="@+id/drinkFinishedTimeButton"
-            android:layout_alignParentRight="true"
-            android:enabled="false" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/drink_end_time_label"
             android:id="@+id/drinkFinishedLabel"
-            android:layout_centerVertical="true"
-            android:enabled="false" />
+            android:enabled="false"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="false" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:26 PM"
+            android:id="@+id/drinkFinishedTimeButton"
+            android:layout_alignParentRight="true"
+            android:enabled="false"
+            android:layout_below="@+id/drinkFinishedLabel" />
 
         <Button
             android:layout_width="wrap_content"
@@ -118,7 +122,10 @@
             android:text="12/15/2015"
             android:id="@+id/drinkFinishedDateButton"
             android:layout_toLeftOf="@+id/drinkFinishedTimeButton"
-            android:enabled="false" />
+            android:enabled="false"
+            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/drinkFinishedLabel" />
+
     </RelativeLayout>
 
     <Button
