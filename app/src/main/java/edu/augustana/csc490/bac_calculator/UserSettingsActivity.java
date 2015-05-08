@@ -61,6 +61,7 @@ public class UserSettingsActivity extends ActionBarActivity {
         fullRadioButton = (RadioButton) findViewById(R.id.fullRadioButton);
         saveButton = (Button) findViewById(R.id.saveButton);
 
+
         sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.putBoolean(Constants.PREF_GENDER, );

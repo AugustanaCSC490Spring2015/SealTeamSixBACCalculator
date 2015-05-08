@@ -147,11 +147,11 @@
         android:layout_marginLeft="10dp">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/foodInBellyLinearLayout"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="left">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -160,28 +160,28 @@
                 android:id="@+id/emptyRadioButton"
                 android:layout_row="9"
                 android:layout_column="0"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal|left" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/running_low_text"
                 android:id="@+id/runningLowRadioButton"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal|left" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/satisfied_text"
                 android:id="@+id/satisfiedRadioButton"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal|left" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/full_text"
                 android:id="@+id/fullRadioButton"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal|left" />
 
         </LinearLayout>
 
@@ -200,7 +200,8 @@
             android:layout_height="wrap_content"
             android:text="@string/save_text"
             android:id="@+id/saveButton"
-            android:layout_gravity="center|bottom" />
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp" />
 
     </LinearLayout>
 
