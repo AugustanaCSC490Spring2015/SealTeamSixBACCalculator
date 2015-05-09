@@ -128,20 +128,22 @@ public class MainActivity extends ActionBarActivity {
                 new DataPoint(exampleDates.get(5), 0.11)
         });
         graph.addSeries(series);
+        series.setColor(getResources().getColor(R.color.graph_line_color));
 
-        /**
+
+       /* *//**
          * formattedDates is an ArrayList of the dates formatted to show just the
          * month, day, and time
-         */
+         *//*
         ArrayList<String> formattedDates = new ArrayList<String>();
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd hh:mm a");
         for (int i = 0; i < 6; i++) {
             formattedDates.add(formatter.format(exampleDates.get(i)));
         }
 
-        /** ArrayList RecentList contains the # most recent entries as strings,
+        *//** ArrayList RecentList contains the # most recent entries as strings,
          * including the date/time and the BAC value
-         */
+         *//*
         ArrayList<String> RecentList = new ArrayList<String>();
         RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
         RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
@@ -193,8 +195,10 @@ public class MainActivity extends ActionBarActivity {
                         soberIn.setText("SOBER IN:" + (int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
                     }
                 });
+
             }
         };
+
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
     }

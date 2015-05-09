@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="edge_padding">8dp</dimen>
     <dimen name="dashboard_button_height">60dp</dimen>
+    <dimen name="label_size">16dp</dimen>
 </resources>

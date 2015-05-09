@@ -134,7 +134,7 @@ public class CalculatorManager {
 
             // just set it to the current BAC and Current time
             futureBAC = currentBAC;
-            futureMaxBACTime.setTimeInMillis(latestDrinkTimeInMS);
+           // futureMaxBACTime.setTimeInMillis(latestDrinkTimeInMS);
         }
     }
 
