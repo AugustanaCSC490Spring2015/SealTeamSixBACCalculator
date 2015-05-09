@@ -22,6 +22,7 @@ public class CalculatorManager {
     private static boolean isMale;
     private static double currentBAC;
     private static double futureBAC;
+    private static double futureSober;
     private static Calendar futureMaxBACTime;
     private static Calendar futureSoberTime;
 
@@ -33,6 +34,21 @@ public class CalculatorManager {
 
     // Will be called to get a "future" BAC, assuming the current drink will take 1 hour to drink; Future BAC will be a linear consumption of current drink.
     public static void calculateCurrentAndFutureBAC(){
+
+        /**
+         * http://www.wsp.wa.gov/breathtest/docs/webdms/Studies_Articles/Widmarks%20Equation%2009-16-1996.pdf
+         * Widmark Formula:
+         * A = (Wr(Ct+Bt))/(0.8z)  (Solve for Ct)
+         *
+         * A: number of drinks consumed
+         * W: body weight (ounces)
+         * r: body water distribution constant (L/Kg)
+         * Ct: BAC (Kg/L)
+         * B: alcohol elimination rate (Kg/L/hr)
+         * t: time since first drink (hours)
+         * 0.8: Widmark's constant
+         * z: fluid ounces of alcohol/drink
+         */
 
         // prevents IndexOUtOfBounds if there are no drinks entered yet
         if(drinkLog.size() == 0){
@@ -48,24 +64,26 @@ public class CalculatorManager {
 
         // get time of last drink entered
         Drink latestDrink = drinkLog.get(drinkLog.size()-1);
-        long latestDrinkTimeInMS = latestDrink.getDrinkStartedCalendar().getTime().getTime();
+        long latestDrinkTimeInMS = 0;
+        if (latestDrink != null){
+            latestDrinkTimeInMS = latestDrink.getDrinkStartedCalendar().getTime().getTime();
+        }
         Log.e("TIME", "LatestDrinkTime" + latestDrinkTimeInMS);
+
+        // something to do before the calculations
+        calculateAverageAlcoholEliminationRate();
 
         // Calculate Current BAC
 
         // re-calculate totalHoursSinceFirstDrink
         long difference = currentTimeInMS - drinkLog.get(0).getDrinkStartedCalendar().getTimeInMillis();
-        Log.e("TIME", "TIME DIFFERENCE:" + difference);
         totalHoursSinceFirstDrink = difference / 3600000; // 3600000ms in 1 hour
-        Log.e("TIME", "TIME DIFFERENCE(HOURS):" + totalHoursSinceFirstDrink);
 
         // pull drinks from arraylist and re-calculate:
         totalAlcoholWithWidmark = 0.0;
-        Log.e("BAC", "TOTALALCOZ:" + totalAlcoholWithWidmark);
         // get all drinks except the last one
         for (int i=0; i<drinkLog.size() - 1; i++){
             totalAlcoholWithWidmark += (drinkLog.get(i).getDrinkABV() * Constants.WIDMARKS_CONSTANT) * drinkLog.get(i).getDrinkVolume();  //calculate Alcohol Volume and add to total
-            Log.e("BAC", "TOTALALCOZ:" + totalAlcoholWithWidmark);
         }
 
         // calculate alcohol in the latest drink
@@ -86,9 +104,7 @@ public class CalculatorManager {
         totalAlcoholWithWidmark += alcoholConsumedInLastDrink; // add last drink into total alcohol
 
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        Log.e("BAC", "BODYWATER:" + bodyWater);
         double alcoholElimination = (averageAlcoholEliminationRate / Constants.GRAMS_IN_KILOGRAMS) * totalHoursSinceFirstDrink;
-        Log.e("BAC", "TOTALALCOZ:" + totalAlcoholWithWidmark);
         currentBAC = totalAlcoholWithWidmark / bodyWater;
         currentBAC = currentBAC - alcoholElimination;
         Log.e("BAC", "ALCELIMINATION:" + alcoholElimination);
@@ -146,17 +162,26 @@ public class CalculatorManager {
         }
     }
 
-    private static void calculateFutureSoberTime(){
+    public static void calculateFutureSoberTime(){
 
+        //http://www.wsp.wa.gov/breathtest/docs/webdms/Studies_Articles/Widmarks%20Equation%2009-16-1996.pdf
+
+        double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
+
+        futureSober = totalAlcoholWithWidmark / bodyWater;
+        // next step is to subtract BAC, but we want BAC=0, so we subtract 0
+        futureSober = futureSober / averageAlcoholEliminationRate;
+    }
+
+    public static double getFutureSoberTime(){
+        return futureSober;
     }
 
     private static void calculateBACHistory(){
         // get current time for calculations
         Calendar currentTimeCalendar = Calendar.getInstance();
         currentTimeCalendar.setTimeInMillis(currentTimeCalendar.getTimeInMillis());
-
         BACHistory.put(currentTimeCalendar, currentBAC);
-
     }
 
     // Gets body water distribution that depends on male/female
@@ -175,11 +200,15 @@ public class CalculatorManager {
 
         drinkLog = new ArrayList<Drink>();
         int drinkSize = savedPreferences.getInt(Constants.PREF_DRINK_LOG_SIZE, 0);
+        Log.e("BAC", "DRINKSIZE:" + drinkSize);
         for (int i = 0; i<drinkSize; i++){
             String json = savedPreferences.getString(Constants.PREF_DRINK_LOG + i, "");
             Gson gson = new Gson();
             Drink d = gson.fromJson(json, Drink.class);
             drinkLog.add(d);
+        }
+        if (drinkLog == null){
+            drinkLog = new ArrayList<Drink>();
         }
     }
 
@@ -202,7 +231,7 @@ public class CalculatorManager {
 
     public static void calculateAverageAlcoholEliminationRate(){
         //http://www.alcohol.vt.edu/Students/Alcohol_effects/Intox_factors/index.html
-        averageAlcoholEliminationRate = averageAlcoholEliminationRate;
+        averageAlcoholEliminationRate = 0.015;
     }
 
     public static double getAverageAlcoholEliminationRate(){

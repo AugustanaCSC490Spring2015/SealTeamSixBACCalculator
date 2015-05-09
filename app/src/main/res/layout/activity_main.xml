@@ -16,7 +16,7 @@
             android:layout_height="@dimen/dashboard_button_height"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/sober_in"
-            android:id="@+id/textView"
+            android:id="@+id/soberInTextView"
             android:layout_weight="1"
             android:textAlignment="gravity"
             android:gravity="center"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
 
-    TextView currentBAC, futureBAC;
+    TextView currentBAC, futureBAC, soberIn;
 
     ListView drinkListView;
 
@@ -50,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
 
         currentBAC = (TextView) findViewById(R.id.currentBACView);
         futureBAC = (TextView) findViewById(R.id.futureBACView);
+        soberIn = (TextView) findViewById(R.id.soberInTextView);
         drinkListView = (ListView) findViewById(R.id.drinkListView);
 
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
@@ -179,7 +181,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void run() {
                 CalculatorManager.calculateCurrentAndFutureBAC();
-
+                CalculatorManager.calculateFutureSoberTime();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -187,12 +189,12 @@ public class MainActivity extends ActionBarActivity {
                         NumberFormat formatter = new DecimalFormat("#0.0000");
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
+                        Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
+                        soberIn.setText("SOBER IN:" + (int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
                     }
                 });
-
             }
         };
-
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
     }
