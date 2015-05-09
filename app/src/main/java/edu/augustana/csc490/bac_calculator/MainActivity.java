@@ -49,9 +49,9 @@ public class MainActivity extends ActionBarActivity {
         CalculatorManager.loadBACPreferences();
         CalculatorManager.weightInPounds = 220;
 
-        currentBAC = (TextView) findViewById(R.id.currentBACView);
-        futureBAC = (TextView) findViewById(R.id.futureBACView);
-        soberIn = (TextView) findViewById(R.id.soberInTextView);
+        currentBAC = (TextView) findViewById(R.id.current_BAC_value);
+        futureBAC = (TextView) findViewById(R.id.future_BAC_value);
+        soberIn = (TextView) findViewById(R.id.sober_in_value);
         drinkListView = (ListView) findViewById(R.id.drinkListView);
 
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
@@ -192,7 +192,7 @@ public class MainActivity extends ActionBarActivity {
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
                         Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
-                        soberIn.setText("SOBER IN:" + (int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
+                        soberIn.setText((int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
                     }
                 });
 
