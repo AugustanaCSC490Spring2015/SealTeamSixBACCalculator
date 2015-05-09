@@ -173,9 +173,7 @@ public class CalculatorManager {
         futureSober = futureSober / averageAlcoholEliminationRate;
     }
 
-    public static double getFutureSoberTime(){
-        return futureSober;
-    }
+
 
     private static void calculateBACHistory(){
         // get current time for calculations
@@ -240,7 +238,12 @@ public class CalculatorManager {
     }
 
     public static void deleteAllDrinks(){
-        drinkLog = new ArrayList<>();
+
+        drinkLog.removeAll(drinkLog);
+        totalAlcoholWithWidmark = 0; // had to add this; for some reason there is a bug where you delete all drinks, and the sober time still persists.
+        calculateCurrentAndFutureBAC();
+        calculateFutureSoberTime();
+        saveBACPreferences();
     }
 
     public static void removeDrink(int id){
@@ -265,6 +268,10 @@ public class CalculatorManager {
 
     public static double getFutureBAC(){
         return futureBAC;
+    }
+
+    public static double getFutureSoberTime(){
+        return futureSober;
     }
 
     /**

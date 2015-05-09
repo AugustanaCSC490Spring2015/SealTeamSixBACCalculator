@@ -41,6 +41,8 @@ public class MainActivity extends ActionBarActivity {
 
     ListView drinkListView;
 
+    DrinkListArrayAdapter drinkAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +79,12 @@ public class MainActivity extends ActionBarActivity {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
                                     new AddDrinkDialog(MainActivity.this).show();
+                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
                                     startActivity(intent);
+                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 default:
                                     break;
@@ -100,8 +104,8 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        final DrinkListArrayAdapter adapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
-        drinkListView.setAdapter(adapter);
+        drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
+        drinkListView.setAdapter(drinkAdapter);
 
         //graph view
         // example data for testing
@@ -225,6 +229,10 @@ public class MainActivity extends ActionBarActivity {
             case R.id.about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true; // return true to close menu
+            case R.id.delete_all_drinks:
+                CalculatorManager.deleteAllDrinks();
+                drinkAdapter.notifyDataSetChanged();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
