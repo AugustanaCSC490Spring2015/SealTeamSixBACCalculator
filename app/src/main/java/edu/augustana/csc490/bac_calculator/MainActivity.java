@@ -187,7 +187,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void run() {
                 CalculatorManager.calculateCurrentAndFutureBAC();
-                CalculatorManager.calculateFutureSoberTime();
+                //CalculatorManager.calculateFutureSoberTime();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

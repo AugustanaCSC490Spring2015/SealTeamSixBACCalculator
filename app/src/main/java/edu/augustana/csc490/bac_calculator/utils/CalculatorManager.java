@@ -23,8 +23,8 @@ public class CalculatorManager {
     private static double currentBAC;
     private static double futureBAC;
     private static double futureSober; // time in a Double format
-    private static Calendar futureMaxBACTime;
-    private static Calendar futureSoberTime;
+   // private static Calendar futureMaxBACTime;
+   // private static Calendar futureSoberTime;
    // private static int numOfDrinksToEliminate;
 
     public static ArrayList<Drink> drinkLog;
@@ -88,8 +88,9 @@ public class CalculatorManager {
         // Calculate Current BAC
 
         // re-calculate totalHoursSinceFirstDrink
-        long difference = currentTimeInMS - drinkLog.get(drinksToEliminate).getDrinkStartedCalendar().getTimeInMillis();
-        double totalHoursSinceFirstDrink = difference / 3600000; // 3600000ms in 1 hour
+        long difference = currentTimeInMS - latestDrinkTimeInMS;
+        Log.e("BAC", "DIFFERENCE:" + difference);
+        double totalHoursSinceFirstDrink = (double) difference / 3600000; // 3600000ms in 1 hour
         Log.e("BAC", "TOTAL-HOURS:" + totalHoursSinceFirstDrink);
 
         // pull drinks from arraylist and re-calculate:
@@ -112,7 +113,7 @@ public class CalculatorManager {
         totalAlcoholWithWidmark += alcoholConsumedInLastDrink; // add last drink into total alcohol
 
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        double alcoholElimination = (averageAlcoholEliminationRate) * totalHoursSinceFirstDrink;
+        double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
         currentBAC = totalAlcoholWithWidmark / bodyWater;
         currentBAC = currentBAC - alcoholElimination;
         if(currentBAC <= 0.0){
@@ -131,9 +132,11 @@ public class CalculatorManager {
             futureBAC = calculateAFutureBAC(totalAlcoholWithWidmark, totalHoursSinceFirstDrink);
 
             // calculate future BAC time:
-            long futureTime = latestDrinkTimeInMS + 3600000;
-            futureMaxBACTime = Calendar.getInstance();
-            futureMaxBACTime.setTimeInMillis(futureTime);
+            long differenceBetweenStartAndNow = currentTimeInMS - drinkLog.get(drinkLog.size()-drinksToEliminate-1).getDrinkStartedCalendar().getTimeInMillis();
+            double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark, difference);
+            numberOfHours = numberOfHours * 3600000;
+            numberOfHours = numberOfHours - differenceBetweenStartAndNow;
+            futureSober = numberOfHours / 3600000;
 
         } else {
 
@@ -217,23 +220,21 @@ public class CalculatorManager {
         }
     }
 
-    public static void calculateFutureSoberTime(){
+    public static double calculateFutureSoberTime(double totalAlcoholWithWidmark, double totalHoursSinceFirstDrink){
 
         //http://www.wsp.wa.gov/breathtest/docs/webdms/Studies_Articles/Widmarks%20Equation%2009-16-1996.pdf
-        double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        int numOfDrinksToEliminate = getHowManyDrinksEliminated();
-        Log.e("BAC", "DRINKSTOELIMINATE:" + numOfDrinksToEliminate);
-        futureSober = getTotalAlcoholWithWidmark(numOfDrinksToEliminate, drinkLog.size()) / bodyWater;
+
+        futureSober = calculateAFutureBAC(totalAlcoholWithWidmark, totalHoursSinceFirstDrink);
         // next step is to subtract BAC, but we want BAC=0, so we subtract 0
-        futureSober = futureSober / averageAlcoholEliminationRate;
+        return (futureSober / getAverageAlcoholEliminationRate());
     }
 
     private static double calculateAFutureBAC(double alcoholWithWidmarkConstant, double totalHours){
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
         double alcoholElimination = (averageAlcoholEliminationRate) * totalHours;
-        double futBAC = (alcoholWithWidmarkConstant / bodyWater) - alcoholElimination;
+        double futBAC = (alcoholWithWidmarkConstant / bodyWater);
         Log.e("BAC", "FUTBAC:" + futBAC);
-        return futBAC - alcoholElimination;
+        return futBAC;
     }
 
     // Gets body water distribution that depends on male/female
@@ -295,7 +296,7 @@ public class CalculatorManager {
 
         drinkLog.removeAll(drinkLog);
         calculateCurrentAndFutureBAC();
-        calculateFutureSoberTime();
+        futureSober = 0.0;
         saveBACPreferences();
     }
 
