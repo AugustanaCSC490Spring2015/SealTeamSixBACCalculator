@@ -204,19 +204,23 @@ public class CalculatorManager {
             }
         } else {
             // calculate BACs in descending number of drinks, checking to see if any drinks should be eliminated
-            for (int i = drinkLog.size() - 1; i >=0; i--){
+            int drinksEliminated = 0;
+            for (int i = drinkLog.size() - 1; i >=1; i--){
                 long currentTime = Calendar.getInstance().getTimeInMillis();
                 long difference = currentTime - drinkLog.get(i).getDrinkStartedCalendar().getTimeInMillis();
                 double totalHours = difference / 3600000;
-                double alcWithWidmark = getTotalAlcoholWithWidmark(0, i);
+                double alcWithWidmark = getTotalAlcoholWithWidmark(i, drinkLog.size() - 1);
                 double BAC = calculateAFutureBAC(alcWithWidmark, totalHours);
                 if(BAC <= 0.0){
                     for(int j=0; i<0; j++){
                     }
-                    return i+1;
+                    drinksEliminated = i+1;
+                    if(i -1 ==0){
+                        return 0;
+                    }
                 }
             }
-            return 0;
+            return drinksEliminated;
         }
     }
 
