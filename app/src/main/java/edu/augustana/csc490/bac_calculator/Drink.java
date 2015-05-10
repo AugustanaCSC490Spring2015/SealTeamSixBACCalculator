@@ -13,6 +13,7 @@ public class Drink {
     private Calendar drinkStarted;
     private Calendar drinkEnded;
     private boolean drinkFinished;
+    private boolean drinkEliminated; // drink has been eliminated from bloodstream
 
     public Drink(String drinkName, String drinkABV, String drinkVolume, Calendar started, Calendar ended){
         this.drinkName = drinkName;
@@ -54,5 +55,13 @@ public class Drink {
 
     public boolean isDrinkFinished(){
         return drinkFinished;
+    }
+
+    public void setDrinkEliminated(boolean is){
+        drinkEliminated = is;
+    }
+
+    public boolean isDrinkEliminated(){
+        return drinkEliminated;
     }
 }

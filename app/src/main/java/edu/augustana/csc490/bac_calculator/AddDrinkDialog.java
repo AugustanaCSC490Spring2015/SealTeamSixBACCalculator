@@ -245,6 +245,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
                 startedDrink = new Drink (drinkNameEditText.getText().toString(), drinkAlcoholContentEditText.getText().toString(), drinkVolumeEditText.getText().toString(), drinkStarted, drinkEnded);
 
                 // add drink to arrayList and close dialog box
+                // TODO: check the times, and place drink in correct order
                 CalculatorManager.drinkLog.add(startedDrink);
 
                 dismiss();
