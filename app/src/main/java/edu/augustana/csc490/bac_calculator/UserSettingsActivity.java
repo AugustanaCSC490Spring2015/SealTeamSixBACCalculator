@@ -83,7 +83,6 @@ public class UserSettingsActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //Todo add functionality to the save button (may need help as I don't know how to work with preferences)
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int tempAte = 0;
@@ -98,7 +97,7 @@ public class UserSettingsActivity extends ActionBarActivity {
 
                 CalculatorManager.setIsMale(maleRadioButton.isChecked());
 
-                double weight = Double.parseDouble(lbsEditText.toString());
+                double weight = Double.parseDouble(lbsEditText.getText().toString());
                 CalculatorManager.setWeightInPounds(weight);
 
                 CalculatorManager.saveBACPreferences();
