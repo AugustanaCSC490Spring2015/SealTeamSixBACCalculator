@@ -65,7 +65,7 @@ public class UserSettingsActivity extends ActionBarActivity {
         }
 
         String weight = sharedPreferences.getString(Constants.PREF_WEIGHT, "");
-        lbsEditText.setText((int) Double.parseDouble(weight));
+        lbsEditText.setText(weight);
 
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
