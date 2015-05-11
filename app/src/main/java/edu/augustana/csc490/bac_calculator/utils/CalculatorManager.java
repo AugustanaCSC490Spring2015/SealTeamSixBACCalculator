@@ -252,7 +252,7 @@ public class CalculatorManager {
 
     public static void loadBACPreferences(){
         isMale = savedPreferences.getBoolean(Constants.PREF_GENDER, true); // default value of "Male"
-        weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "0.0"));  // default value of 0.0
+        weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "180.0"));  // default value of 180.0
         howMuchAte = savedPreferences.getInt(Constants.PREF_HOW_MUCH_ATE, 0);
 
         drinkLog = new ArrayList<Drink>();

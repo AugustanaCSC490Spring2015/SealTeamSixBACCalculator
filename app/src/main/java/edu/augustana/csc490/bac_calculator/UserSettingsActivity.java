@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
@@ -101,6 +102,8 @@ public class UserSettingsActivity extends ActionBarActivity {
                 CalculatorManager.setWeightInPounds(weight);
 
                 CalculatorManager.saveBACPreferences();
+
+                Toast.makeText(UserSettingsActivity.this, "Successfully saved your settings!", Toast.LENGTH_SHORT).show();
             }
         });
 

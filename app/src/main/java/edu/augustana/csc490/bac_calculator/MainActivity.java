@@ -49,7 +49,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
-        CalculatorManager.weightInPounds = 220;
 
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
         futureBAC = (TextView) findViewById(R.id.future_BAC_value);
