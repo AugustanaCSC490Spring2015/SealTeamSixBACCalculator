@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,28 +30,32 @@ import java.util.TimerTask;
 
 import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
+import edu.augustana.csc490.bac_calculator.utils.DrinkListArrayAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
 
-    TextView currentBAC, futureBAC;
+    TextView currentBAC, futureBAC, soberIn;
+
+    ListView drinkListView;
+
+    DrinkListArrayAdapter drinkAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
         CalculatorManager.weightInPounds = 220;
 
-        currentBAC = (TextView) findViewById(R.id.currentBACView);
-        futureBAC = (TextView) findViewById(R.id.futureBACView);
+        currentBAC = (TextView) findViewById(R.id.current_BAC_value);
+        futureBAC = (TextView) findViewById(R.id.future_BAC_value);
+        soberIn = (TextView) findViewById(R.id.sober_in_value);
+        drinkListView = (ListView) findViewById(R.id.drinkListView);
 
-        /**@TODO: code finish drink button
-         */
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
 
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
@@ -75,10 +79,12 @@ public class MainActivity extends ActionBarActivity {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
                                     new AddDrinkDialog(MainActivity.this).show();
+                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
                                     startActivity(intent);
+                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 default:
                                     break;
@@ -97,6 +103,9 @@ public class MainActivity extends ActionBarActivity {
                CalculatorManager.finishDrink();
             }
         });
+
+        drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
+        drinkListView.setAdapter(drinkAdapter);
 
         //graph view
         // example data for testing
@@ -123,20 +132,22 @@ public class MainActivity extends ActionBarActivity {
                 new DataPoint(exampleDates.get(5), 0.11)
         });
         graph.addSeries(series);
+        series.setColor(getResources().getColor(R.color.graph_line_color));
 
-        /**
+
+       /* *//**
          * formattedDates is an ArrayList of the dates formatted to show just the
          * month, day, and time
-         */
+         *//*
         ArrayList<String> formattedDates = new ArrayList<String>();
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd hh:mm a");
         for (int i = 0; i < 6; i++) {
             formattedDates.add(formatter.format(exampleDates.get(i)));
         }
 
-        /** ArrayList RecentList contains the # most recent entries as strings,
+        *//** ArrayList RecentList contains the # most recent entries as strings,
          * including the date/time and the BAC value
-         */
+         *//*
         ArrayList<String> RecentList = new ArrayList<String>();
         RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
         RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
@@ -147,14 +158,15 @@ public class MainActivity extends ActionBarActivity {
 
 
         /** arrayAdapter adapts RecentList to the dashboard list view lv
-         */
-        ListView lv = (ListView) findViewById(R.id.listView);
+
+        ListView lv = (ListView) findViewById(R.id.drinkListView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.dashboard_list_item,
                 RecentList);
 
         lv.setAdapter(arrayAdapter);
+        */
 
         // set date x-axis label formatter
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -175,7 +187,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void run() {
                 CalculatorManager.calculateCurrentAndFutureBAC();
-
+                //CalculatorManager.calculateFutureSoberTime();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -183,6 +195,8 @@ public class MainActivity extends ActionBarActivity {
                         NumberFormat formatter = new DecimalFormat("#0.0000");
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
+                        Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
+                        soberIn.setText((int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
                     }
                 });
 
@@ -191,7 +205,6 @@ public class MainActivity extends ActionBarActivity {
 
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
-
     }
 
     @Override
@@ -213,6 +226,13 @@ public class MainActivity extends ActionBarActivity {
                 Intent untappdSettingsIntent = new Intent(this, UntappdSettingsActivity.class);
                 startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true; // return true to close menu
+            case R.id.delete_all_drinks:
+                CalculatorManager.deleteAllDrinks();
+                drinkAdapter.notifyDataSetChanged();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

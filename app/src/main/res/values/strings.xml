@@ -40,4 +40,6 @@
     <string name="cancel_text">Cancel</string>
     <string name="satisfied_text">Satisfied</string>
     <string name="sex_text">Sex</string>
+    <string name="about">About</string>
+    <string name="try_again">Something went wrong, plase try again.</string>
 </resources>

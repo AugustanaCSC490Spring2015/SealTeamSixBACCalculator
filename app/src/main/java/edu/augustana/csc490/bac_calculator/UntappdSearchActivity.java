@@ -140,7 +140,7 @@ public class UntappdSearchActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(String... args) {
-            GetJSON jsonParser = new GetJSON();
+            GetJSON jsonParser = new GetJSON(UntappdSearchActivity.this);
             JSONObject jsonObject = jsonParser.getBeerSearch(token, query);
             return jsonObject;
         }

@@ -1,12 +1,17 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ListTextView"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/beerNameTextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textAlignment="gravity"
     android:padding="3dp"
-    >
+    android:text="BEER NAME">
     <!-- default text
     android:text="No Entries"-->
-</TextView>
+    </TextView>
+</RelativeLayout>

@@ -13,52 +13,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/heightText"
-            android:id="@+id/heightTextView"
-            android:layout_column="0"
-            android:layout_row="0"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feet_text"
-            android:id="@+id/feetTextView"
-            android:layout_column="0"
-            android:layout_row="1"
-            android:layout_marginLeft="20dp" />
-
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/feetEditText"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:editable="true"
-            android:inputType="number" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/inches_text"
-            android:id="@+id/inchesTextView"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:layout_marginLeft="20dp" />
-
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/inchesEditText"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:editable="true"
-            android:inputType="number" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/weight_text"
             android:id="@+id/weightTextView"
             android:layout_row="3"
@@ -99,30 +53,24 @@
             android:layout_column="0"
             android:layout_row="6"
             android:id="@+id/genderRadioGroup"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/genderLinearLayout">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male_text"
+                android:id="@+id/maleRadioButton"
+                android:layout_row="6"
+                android:layout_column="0" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/male_text"
-                    android:id="@+id/maleRadioButton"
-                    android:layout_row="6"
-                    android:layout_column="0" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/female_text"
-                    android:id="@+id/femaleRadioButton"
-                    android:layout_row="6"
-                    android:layout_column="1" />
-            </LinearLayout>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female_text"
+                android:id="@+id/femaleRadioButton"
+                android:layout_row="6"
+                android:layout_column="1" />
 
         </RadioGroup>
 
@@ -146,44 +94,35 @@
         android:id="@+id/foodInBellyRadiogroup"
         android:layout_marginLeft="10dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/foodInBellyLinearLayout"
-            android:layout_gravity="center_horizontal">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_text"
+            android:id="@+id/emptyRadioButton"
+            android:layout_row="9"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|left" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/empty_text"
-                android:id="@+id/emptyRadioButton"
-                android:layout_row="9"
-                android:layout_column="0"
-                android:layout_gravity="center_horizontal" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/running_low_text"
+            android:id="@+id/runningLowRadioButton"
+            android:layout_gravity="center_horizontal|left" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/running_low_text"
-                android:id="@+id/runningLowRadioButton"
-                android:layout_gravity="center_horizontal" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/satisfied_text"
+            android:id="@+id/satisfiedRadioButton"
+            android:layout_gravity="center_horizontal|left" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/satisfied_text"
-                android:id="@+id/satisfiedRadioButton"
-                android:layout_gravity="center_horizontal" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/full_text"
-                android:id="@+id/fullRadioButton"
-                android:layout_gravity="center_horizontal" />
-
-        </LinearLayout>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/full_text"
+            android:id="@+id/fullRadioButton"
+            android:layout_gravity="center_horizontal|left" />
 
     </RadioGroup>
 
@@ -201,14 +140,8 @@
             android:text="@string/save_text"
             android:id="@+id/saveButton"
             android:layout_gravity="center|bottom"
-            android:layout_marginRight="50dp" />
+            android:layout_marginBottom="10dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_text"
-            android:id="@+id/cancelButton"
-            android:layout_gravity="center|bottom" />
     </LinearLayout>
 
 </LinearLayout>

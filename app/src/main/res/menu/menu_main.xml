@@ -8,4 +8,14 @@
         android:title="@string/untappd_settings"
         android:orderInCategory="200"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:title="@string/about"
+        android:orderInCategory="300"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_all_drinks"
+        android:title="Delete All Drinks"
+        android:orderInCategory="400"
+        app:showAsAction="never" />
 </menu>
