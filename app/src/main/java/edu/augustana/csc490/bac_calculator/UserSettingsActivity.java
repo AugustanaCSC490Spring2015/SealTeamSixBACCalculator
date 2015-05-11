@@ -86,24 +86,28 @@ public class UserSettingsActivity extends ActionBarActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                int tempAte = 0;
-                if(runningLowRadioButton.isChecked()) {
-                    tempAte = 1;
-                } else if (satisfiedRadioButton.isChecked()) {
-                    tempAte =2;
-                } else if (fullRadioButton.isChecked()) {
-                    tempAte=3;
+                if(Double.parseDouble(lbsEditText.getText().toString()) <= 0){
+                    Toast.makeText(UserSettingsActivity.this, "Invalid weight", Toast.LENGTH_SHORT).show();
+                } else {
+                    int tempAte = 0;
+                    if(runningLowRadioButton.isChecked()) {
+                        tempAte = 1;
+                    } else if (satisfiedRadioButton.isChecked()) {
+                        tempAte =2;
+                    } else if (fullRadioButton.isChecked()) {
+                        tempAte=3;
+                    }
+                    CalculatorManager.setHowMuchAte(tempAte);
+
+                    CalculatorManager.setIsMale(maleRadioButton.isChecked());
+
+                    double weight = Double.parseDouble(lbsEditText.getText().toString());
+                    CalculatorManager.setWeightInPounds(weight);
+
+                    CalculatorManager.saveBACPreferences();
+
+                    Toast.makeText(UserSettingsActivity.this, "Successfully saved your settings!", Toast.LENGTH_SHORT).show();
                 }
-                CalculatorManager.setHowMuchAte(tempAte);
-
-                CalculatorManager.setIsMale(maleRadioButton.isChecked());
-
-                double weight = Double.parseDouble(lbsEditText.getText().toString());
-                CalculatorManager.setWeightInPounds(weight);
-
-                CalculatorManager.saveBACPreferences();
-
-                Toast.makeText(UserSettingsActivity.this, "Successfully saved your settings!", Toast.LENGTH_SHORT).show();
             }
         });
 
