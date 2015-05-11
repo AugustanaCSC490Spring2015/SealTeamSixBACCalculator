@@ -110,7 +110,7 @@ public class UntappdSettingsActivity extends ActionBarActivity {
 
                                 // close dialog
                                 dialog.dismiss();
-                            } else if (url.toLowerCase().contains(Constants.REDIRECT_URL) && sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null) {
+                            } else if (url.toLowerCase().contains(Constants.REDIRECT_URL) && sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null && !url.toLowerCase().contains("client_id=")) {
                                 // Redirected to redirect url without token
                                 Log.wtf("Bad Redirect from Untappd: ", url);
                                 // Ask user to try again and close the webview dialog
