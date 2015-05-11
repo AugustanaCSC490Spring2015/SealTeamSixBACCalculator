@@ -226,7 +226,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
             case R.id.about:
-                startActivity(new Intent(this, AboutActivity.class));
+                this.showAboutDialog();
                 return true; // return true to close menu
             case R.id.delete_all_drinks:
                 CalculatorManager.deleteAllDrinks();
@@ -235,5 +235,21 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Creates and shows the about dialog
+     */
+    private void showAboutDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.about_title)
+                .setMessage(R.string.about_text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing, close dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
