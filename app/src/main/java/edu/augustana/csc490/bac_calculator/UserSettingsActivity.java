@@ -79,23 +79,31 @@ public class UserSettingsActivity extends ActionBarActivity {
             fullRadioButton.setChecked(true);
         }
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //editor.putBoolean(Constants.PREF_GENDER, );
-        //editor.putString();
-        editor.commit();
-
         // Set the up arrow in the ActionBar to the home screen
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Todo add functionality to the save button (may need help as I don't know how to work with preferences)
-        /*saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.commit();
+                int tempAte = 0;
+                if(runningLowRadioButton.isChecked()) {
+                    tempAte = 1;
+                } else if (satisfiedRadioButton.isChecked()) {
+                    tempAte =2;
+                } else if (fullRadioButton.isChecked()) {
+                    tempAte=3;
+                }
+                CalculatorManager.setHowMuchAte(tempAte);
+
+                CalculatorManager.setIsMale(maleRadioButton.isChecked());
+
+                double weight = Double.parseDouble(lbsEditText.toString());
+                CalculatorManager.setWeightInPounds(weight);
+
+                CalculatorManager.saveBACPreferences();
             }
         });
-        */
+
     }
 }
