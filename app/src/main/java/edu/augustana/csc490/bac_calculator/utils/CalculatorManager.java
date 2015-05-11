@@ -347,4 +347,6 @@ public class CalculatorManager {
         return howMuchAte;
     }
 
+    public static double getWeightInPounds() { return weightInPounds; }
+
 }

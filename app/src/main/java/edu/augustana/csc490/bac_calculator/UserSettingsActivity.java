@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 /**
@@ -58,15 +59,25 @@ public class UserSettingsActivity extends ActionBarActivity {
 
         sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
 
-        if (sharedPreferences.getBoolean(Constants.PREF_GENDER, true)){
+        if (CalculatorManager.getIsMale()){
             maleRadioButton.setChecked(true);
         } else {
             femaleRadioButton.setChecked(true);
         }
 
-        String weight = sharedPreferences.getString(Constants.PREF_WEIGHT, "");
-        lbsEditText.setText(weight);
+        lbsEditText.setText(""+CalculatorManager.getWeightInPounds());
 
+        int amountAte = CalculatorManager.getHowMuchAte();
+
+        if(amountAte == 0){
+            emptyRadioButton.setChecked(true);
+        } else if(amountAte == 1){
+            runningLowRadioButton.setChecked((true));
+        } else if(amountAte == 2){
+            satisfiedRadioButton.setChecked(true);
+        } else{
+            fullRadioButton.setChecked(true);
+        }
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.putBoolean(Constants.PREF_GENDER, );
