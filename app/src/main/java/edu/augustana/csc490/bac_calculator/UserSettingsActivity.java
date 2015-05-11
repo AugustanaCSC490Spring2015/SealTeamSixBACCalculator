@@ -57,6 +57,14 @@ public class UserSettingsActivity extends ActionBarActivity {
 
 
         sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+
+        if (sharedPreferences.getBoolean(Constants.PREF_GENDER, true)){
+            maleRadioButton.setChecked(true);
+        } else {
+            femaleRadioButton.setChecked(true);
+        }
+
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.putBoolean(Constants.PREF_GENDER, );
         //editor.putString();
