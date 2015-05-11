@@ -64,6 +64,9 @@ public class UserSettingsActivity extends ActionBarActivity {
             femaleRadioButton.setChecked(true);
         }
 
+        String weight = sharedPreferences.getString(Constants.PREF_WEIGHT, "");
+        lbsEditText.setText((int) Double.parseDouble(weight));
+
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.putBoolean(Constants.PREF_GENDER, );
