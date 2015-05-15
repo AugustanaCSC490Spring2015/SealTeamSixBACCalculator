@@ -9,7 +9,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Horus put stuff here"
-        android:id="@+id/aboutTextView"
-        android:layout_gravity="center_horizontal" />
+        android:text="@string/developed_by_text"
+        android:id="@+id/titleTextView"
+        android:layout_gravity="center_horizontal|top" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/about_text"
+            android:id="@+id/aboutTextView"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
 </LinearLayout>
