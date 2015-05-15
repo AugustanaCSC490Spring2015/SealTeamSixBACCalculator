@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -111,6 +113,27 @@ public class MainActivity extends ActionBarActivity {
 
         drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
         drinkListView.setAdapter(drinkAdapter);
+        drinkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CalculatorManager.removeDrink(position);
+                        drinkAdapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                });
+                builder.setMessage("Delete drink?");
+                builder.create().show();
+            }
+        });
 
         //graph view
         // example data for testing
@@ -232,7 +255,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
             case R.id.about:
-                this.showAboutDialog();
+                startActivity(new Intent(this, AboutActivity.class));
                 return true; // return true to close menu
             case R.id.delete_all_drinks:
                 CalculatorManager.deleteAllDrinks();
