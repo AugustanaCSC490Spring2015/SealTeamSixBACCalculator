@@ -50,8 +50,6 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
     private Calendar drinkEnded;
 
 
-    //private Date drinkStarted;
-
     Drink startedDrink;
 
     public AddDrinkDialog(Context context) {

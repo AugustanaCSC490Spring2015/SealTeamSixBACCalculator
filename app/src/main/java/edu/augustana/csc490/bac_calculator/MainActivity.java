@@ -1,6 +1,9 @@
 package edu.augustana.csc490.bac_calculator;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -105,7 +108,39 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-               CalculatorManager.finishDrink();
+
+                // add dialog to confirm that they finished the drink
+                DialogFragment finishedDrinkDialog = new DialogFragment() {
+                    // create an AlertDialog and return it
+                    @Override
+                    public Dialog onCreateDialog(Bundle bundle){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setCancelable(false);
+
+                        builder.setMessage("Did you finish your drink?");
+
+                        // "Reset Quiz" Button
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                CalculatorManager.finishDrink();
+                            }
+                        } // end anonymous inner class
+                        ); // end call to setPositiveButton
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dismiss();
+                            }
+
+                        }
+                        );
+
+                        return builder.create(); // return the AlertDialog
+                    } // end method onCreateDialog
+                }; // end DialogFragment anonymous inner class
+
+                // use FragmentManager to display the DialogFragment
+                finishedDrinkDialog.show(getFragmentManager(), "Confirm Finished Drink");
+
             }
         });
 
