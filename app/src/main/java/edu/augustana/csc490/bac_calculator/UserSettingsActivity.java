@@ -10,7 +10,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 
 /**
@@ -57,23 +59,57 @@ public class UserSettingsActivity extends ActionBarActivity {
 
 
         sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //editor.putBoolean(Constants.PREF_GENDER, );
-        //editor.putString();
-        editor.commit();
+
+        if (CalculatorManager.getIsMale()){
+            maleRadioButton.setChecked(true);
+        } else {
+            femaleRadioButton.setChecked(true);
+        }
+
+        lbsEditText.setText(""+CalculatorManager.getWeightInPounds());
+
+        int amountAte = CalculatorManager.getHowMuchAte();
+
+        if(amountAte == 0){
+            emptyRadioButton.setChecked(true);
+        } else if(amountAte == 1){
+            runningLowRadioButton.setChecked((true));
+        } else if(amountAte == 2){
+            satisfiedRadioButton.setChecked(true);
+        } else{
+            fullRadioButton.setChecked(true);
+        }
 
         // Set the up arrow in the ActionBar to the home screen
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //Todo add functionality to the save button (may need help as I don't know how to work with preferences)
-        /*saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.commit();
+                if(Double.parseDouble(lbsEditText.getText().toString()) <= 0){
+                    Toast.makeText(UserSettingsActivity.this, "Invalid weight", Toast.LENGTH_SHORT).show();
+                } else {
+                    int tempAte = 0;
+                    if(runningLowRadioButton.isChecked()) {
+                        tempAte = 1;
+                    } else if (satisfiedRadioButton.isChecked()) {
+                        tempAte =2;
+                    } else if (fullRadioButton.isChecked()) {
+                        tempAte=3;
+                    }
+                    CalculatorManager.setHowMuchAte(tempAte);
+
+                    CalculatorManager.setIsMale(maleRadioButton.isChecked());
+
+                    double weight = Double.parseDouble(lbsEditText.getText().toString());
+                    CalculatorManager.setWeightInPounds(weight);
+
+                    CalculatorManager.saveBACPreferences();
+
+                    Toast.makeText(UserSettingsActivity.this, "Successfully saved your settings!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        */
+
     }
 }

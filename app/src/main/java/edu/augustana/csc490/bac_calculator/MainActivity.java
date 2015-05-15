@@ -49,7 +49,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
-        CalculatorManager.weightInPounds = 220;
 
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
         futureBAC = (TextView) findViewById(R.id.future_BAC_value);
@@ -79,12 +78,10 @@ public class MainActivity extends ActionBarActivity {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
                                     new AddDrinkDialog(MainActivity.this).show();
-                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
                                     startActivity(intent);
-                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 default:
                                     break;
@@ -92,7 +89,15 @@ public class MainActivity extends ActionBarActivity {
                         }
                     });
                     builder.create().show();
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            drinkAdapter.notifyDataSetChanged();
+                        }
+                    });
+
                 }
+
             }
         });
 
@@ -227,7 +232,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(untappdSettingsIntent);
                 return true; // return true to close menu
             case R.id.about:
-                startActivity(new Intent(this, AboutActivity.class));
+                this.showAboutDialog();
                 return true; // return true to close menu
             case R.id.delete_all_drinks:
                 CalculatorManager.deleteAllDrinks();
@@ -236,5 +241,21 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Creates and shows the about dialog
+     */
+    private void showAboutDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.about_title)
+                .setMessage(R.string.about_text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing, close dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
