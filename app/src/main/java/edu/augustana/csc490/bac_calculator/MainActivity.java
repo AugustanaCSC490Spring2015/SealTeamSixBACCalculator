@@ -78,12 +78,10 @@ public class MainActivity extends ActionBarActivity {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
                                     new AddDrinkDialog(MainActivity.this).show();
-                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
                                     startActivity(intent);
-                                    drinkAdapter.notifyDataSetChanged();
                                     break;
                                 default:
                                     break;
@@ -91,7 +89,15 @@ public class MainActivity extends ActionBarActivity {
                         }
                     });
                     builder.create().show();
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            drinkAdapter.notifyDataSetChanged();
+                        }
+                    });
+
                 }
+
             }
         });
 
