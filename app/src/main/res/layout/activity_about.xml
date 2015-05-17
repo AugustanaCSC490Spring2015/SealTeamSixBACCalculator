@@ -9,7 +9,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Horus put stuff here"
-        android:id="@+id/aboutTextView"
-        android:layout_gravity="center_horizontal" />
+        android:text="@string/developed_by_text"
+        android:id="@+id/titleTextView"
+        android:layout_gravity="center_horizontal|top"
+        android:paddingTop="10dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/about_text"
+            android:id="@+id/aboutTextView"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:paddingTop="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/about_formulas"
+            android:id="@+id/aboutFormulasTextView"
+            android:layout_gravity="center"
+            android:paddingTop="15dp"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/sources_text"
+            android:id="@+id/sourcesTextView"
+            android:layout_gravity="center"
+            android:paddingTop="15dp" />
+    </LinearLayout>
+
 </LinearLayout>

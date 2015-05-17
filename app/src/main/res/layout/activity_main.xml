@@ -160,7 +160,7 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
             android:layout_alignParentBottom="true"
-            android:background="#FF83C2D8"
+            android:background="@drawable/dash_btn_blue"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         <Button
@@ -170,7 +170,7 @@
             android:id="@+id/finishDrinkButton"
             android:layout_gravity="center_horizontal"
             android:layout_above="@+id/addDrinkButton"
-            android:background="#FFAFAFAF"
+            android:background="@drawable/dash_btn_gray"
             android:layout_marginBottom="8dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 

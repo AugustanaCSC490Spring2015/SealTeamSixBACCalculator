@@ -14,18 +14,12 @@ import edu.augustana.csc490.bac_calculator.Drink;
 public class CalculatorManager {
 
     // Variables
-    //private static double totalAlcoholWithWidmark;
     public static double weightInPounds;
-    //private static double totalHoursSinceFirstDrink;
-    private static double averageAlcoholEliminationRate;  // avg. is 0.015
     private static int howMuchAte;
     private static boolean isMale;
     private static double currentBAC;
     private static double futureBAC;
     private static double futureSober; // time in a Double format
-   // private static Calendar futureMaxBACTime;
-   // private static Calendar futureSoberTime;
-   // private static int numOfDrinksToEliminate;
 
     public static ArrayList<Drink> drinkLog;
     public static Map<Calendar, Double> BACHistory;
@@ -51,92 +45,94 @@ public class CalculatorManager {
          * z: fluid ounces of alcohol/drink
          */
 
-        // prevents IndexOUtOfBounds if there are no drinks entered yet
-        if(drinkLog.size() == 0){
-            currentBAC = 0.0;
-            futureBAC = 0.0;
-            return;
-        }
-
         // something to do before the calculations
         int drinksToEliminate = getHowManyDrinksToEliminate();
         Log.e("BAC", "DRINKSTOELIMINATE:" + drinksToEliminate);
 
-        // if all the drinks are eliminated, don't bother calculating
+        // if all the drinks are eliminated or none have been entered, don't bother calculating, and set values to 0;
         if (drinksToEliminate >= drinkLog.size()){
             currentBAC = 0.0;
             futureBAC = 0.0;
+            futureSober = 0.00;
             return;
         }
 
         // get current time for calculations
-        Calendar currentTimeCalendar = Calendar.getInstance();
-        long currentTimeInMS = currentTimeCalendar.getTime().getTime();
+        long currentTimeInMS = getCurrentTimeInMS();
 
-        // get time of last drink entered
-        Drink latestDrink = drinkLog.get(drinkLog.size()-1);
-        long latestDrinkTimeInMS = 0;
-        if (latestDrink != null){
-            latestDrinkTimeInMS = latestDrink.getDrinkStartedCalendar().getTime().getTime();
-        }
+        // Get time of the first drink:
+        Drink firstDrink = drinkLog.get(drinksToEliminate); // We don't want to count eliminated drinks, so we start with the number of eliminated ones
+        long totalMSSinceFirstDrink = currentTimeInMS - firstDrink.getDrinkStartedCalendar().getTimeInMillis();
 
-        // another thing to do
-        calculateAverageAlcoholEliminationRate();
+        /**
+         *****Calculate Current BAC*****
+         */
 
-        // Calculate Current BAC
-
-        // re-calculate totalHoursSinceFirstDrink
-        long difference = currentTimeInMS - latestDrinkTimeInMS;
-        double totalHoursSinceFirstDrink = (double) difference / 3600000; // 3600000ms in 1 hour
-
-        // pull drinks from arraylist and re-calculate:
+        // Calculate total Alcohol of all drinks except the last one
         double totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(drinksToEliminate, drinkLog.size() - 1);
-        // get all drinks except the last one
 
-        // calculate alcohol in the latest drink
-        double alcoholConsumedInLastDrink = 0.0;
+        // Get the latest drink
+        Drink latestDrink = drinkLog.get(drinkLog.size()-1);
+
+        // Calculate alcohol in the latest drink
+        double alcoholConsumedInLastDrink = getTotalAlcoholWithWidmark(drinkLog.size() - 1, drinkLog.size());
+
         if (!latestDrink.isDrinkFinished()) { // make sure its not already finished
-            if (difference < 1200000){ // calculate percentage of drink drank based on 20 minutes
+
+            // Get time since the last drink
+            long latestDrinkTimeInMS = drinkLog.get(drinkLog.size()-1).getDrinkStartedCalendar().getTime().getTime();
+            long difference = currentTimeInMS - latestDrinkTimeInMS;
+
+            if (difference < 1200000){ // calculate percentage of drink drank based on 20 minutes (1200000ms in 20 minutes)
                 double drinkPercentage = (difference * 1.0) / 1200000.0; // multiply by 1.0 to convert to doubles, then do division
-                alcoholConsumedInLastDrink = (latestDrink.getDrinkABV() * Constants.WIDMARKS_CONSTANT) * (latestDrink.getDrinkVolume() * 1.0) * drinkPercentage;
-            } else{ // if its longer than an hour, consider it all drank
-                alcoholConsumedInLastDrink = (latestDrink.getDrinkABV() * Constants.WIDMARKS_CONSTANT) * (latestDrink.getDrinkVolume() * 1.0);
+                alcoholConsumedInLastDrink *= drinkPercentage;
+            } else{ // if its longer than 20 minutes, consider it all drank and mark drink as drank
+                finishDrink();
             }
-        } else {  // if its already drank, then calculate it like normal
-            alcoholConsumedInLastDrink = (latestDrink.getDrinkABV() * Constants.WIDMARKS_CONSTANT) * (latestDrink.getDrinkVolume() * 1.0);
         }
+
         totalAlcoholWithWidmark += alcoholConsumedInLastDrink; // add last drink into total alcohol
 
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
+
+        // Get total hours since first drink
+        double totalHoursSinceFirstDrink = (totalMSSinceFirstDrink * 1.0) / 3600000.0;
+        Log.e("BAC", "TOTAL_MS:" + totalMSSinceFirstDrink);
+        Log.e("BAC", "TOTAL_HOURS:" + totalHoursSinceFirstDrink);
+
         double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
+        Log.e("BAC", "ALC-ELIMINATION:" + alcoholElimination);
         currentBAC = totalAlcoholWithWidmark / bodyWater;
         currentBAC = currentBAC - alcoholElimination;
         if(currentBAC <= 0.0){
             currentBAC = 0.0;
         }
-        saveBACPreferences();
 
-        // Calculate Future BAC
+        /*
+        *****Calculate Future BAC*****
+         */
 
         if (!latestDrink.isDrinkFinished()) { // make sure its not already finished
 
-            // pull drinks from arraylist and calculate future BAC:
+            // Pull drinks from arraylist and calculate future BAC:
             totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(drinksToEliminate, drinkLog.size());
             futureBAC = calculateFutureMaxBAC(totalAlcoholWithWidmark);
-
-            // calculate future BAC time:
-            long differenceBetweenStartAndNow = currentTimeInMS - drinkLog.get(drinkLog.size()-1).getDrinkStartedCalendar().getTimeInMillis();
-            double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark);
-            numberOfHours = numberOfHours * 3600000;
-            numberOfHours = numberOfHours - differenceBetweenStartAndNow;
-            futureSober = numberOfHours / 3600000;
 
         } else {
 
             // just set it to the current BAC and Current time
             futureBAC = currentBAC;
-           // futureMaxBACTime.setTimeInMillis(latestDrinkTimeInMS);
         }
+
+        /*
+        *****Calculate Future Sober Time*****
+         */
+
+        double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark);
+        futureSober = numberOfHours - totalHoursSinceFirstDrink;
+
+        // Save Preferences to backup
+        saveBACPreferences();
     }
 
     private static double getTotalAlcoholWithWidmark(int start, int end){
@@ -149,11 +145,8 @@ public class CalculatorManager {
 
     private static long getCurrentTimeInMS(){
         Calendar currentTimeCalendar = Calendar.getInstance();
-        long currentTimeInMS = currentTimeCalendar.getTime().getTime();
-        Log.e("TIME", "CurrentTime:" + currentTimeInMS);
-        return currentTimeInMS;
+        return currentTimeCalendar.getTimeInMillis();
     }
-
 
     public static boolean finishDrink(){
 
@@ -165,7 +158,6 @@ public class CalculatorManager {
 
             // get current time for calculations
             Calendar currentTimeCalendar = Calendar.getInstance();
-            long currentTimeInMS = currentTimeCalendar.getTime().getTime();
 
             // set end time for last drink
             Drink latestDrink = drinkLog.get(drinkLog.size() - 1);
@@ -204,13 +196,11 @@ public class CalculatorManager {
 
             long differenceTimeBetweenDrinks = nextDrinkTime - firstDrinkTime;
             double differenceInHours = (double) differenceTimeBetweenDrinks / 3600000; // 3600000ms in 1 hour
-            Log.e("BAC", "DIFFERENCEINHOURS" + differenceInHours);
 
             // Calculate your sober time for the drinks
             double alcWithWidmark = getTotalAlcoholWithWidmark(0, i);
             double aFutureSoberTime = calculateFutureSoberTime(alcWithWidmark);
             double differenceBetweenDrinks = aFutureSoberTime - differenceInHours;
-            Log.e("BAC", "Difference-Time-In-Drinks:" + differenceBetweenDrinks);
 
             // If you get a negative difference between the future sober time and the time difference between consuming
             // the drinks, then eliminate the previous drinks, because they are already digested
@@ -234,8 +224,7 @@ public class CalculatorManager {
 
     private static double calculateFutureMaxBAC(double alcoholWithWidmarkConstant){
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        double futBAC = (alcoholWithWidmarkConstant / bodyWater);
-        return futBAC;
+        return (alcoholWithWidmarkConstant / bodyWater);
     }
 
     // Gets body water distribution that depends on male/female
@@ -252,7 +241,7 @@ public class CalculatorManager {
         weightInPounds = Double.parseDouble(savedPreferences.getString(Constants.PREF_WEIGHT, "180.0"));  // default value of 180.0
         howMuchAte = savedPreferences.getInt(Constants.PREF_HOW_MUCH_ATE, 0);
 
-        drinkLog = new ArrayList<Drink>();
+        drinkLog = new ArrayList<>();
         int drinkSize = savedPreferences.getInt(Constants.PREF_DRINK_LOG_SIZE, 0);
         for (int i = 0; i<drinkSize; i++){
             String json = savedPreferences.getString(Constants.PREF_DRINK_LOG + i, "");
@@ -261,7 +250,7 @@ public class CalculatorManager {
             drinkLog.add(d);
         }
         if (drinkLog == null){
-            drinkLog = new ArrayList<Drink>();
+            drinkLog = new ArrayList<>();
         }
     }
 
@@ -279,29 +268,27 @@ public class CalculatorManager {
             String json = gson.toJson(drinkLog.get(i));
             saver.putString(Constants.PREF_DRINK_LOG + i, json);
         }
-        saver.commit();
-    }
-
-    public static void calculateAverageAlcoholEliminationRate(){
-        //http://www.alcohol.vt.edu/Students/Alcohol_effects/Intox_factors/index.html
-        averageAlcoholEliminationRate = 0.015;
+        saver.apply();
     }
 
     public static double getAverageAlcoholEliminationRate(){
 
-        return averageAlcoholEliminationRate;
+        if (isMale){
+            return 0.017;
+        } else {
+            return 0.015;
+        }
     }
 
     public static void deleteAllDrinks(){
-
-        drinkLog.removeAll(drinkLog);
-        calculateCurrentAndFutureBAC();
-        futureSober = 0.0;
+        drinkLog.removeAll(drinkLog); // good code?
+        calculateCurrentAndFutureBAC(); // update calculation right away
         saveBACPreferences();
     }
 
     public static void removeDrink(int id){
         drinkLog.remove(id);
+        calculateCurrentAndFutureBAC(); // update calculation right away
     }
 
     public static void setIsMale(boolean b){
