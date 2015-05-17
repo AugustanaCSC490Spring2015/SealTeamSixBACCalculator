@@ -45,21 +45,15 @@ public class CalculatorManager {
          * z: fluid ounces of alcohol/drink
          */
 
-        // prevents IndexOUtOfBounds if there are no drinks entered yet
-        if(drinkLog.size() == 0){
-            currentBAC = 0.0;
-            futureBAC = 0.0;
-            return;
-        }
-
         // something to do before the calculations
         int drinksToEliminate = getHowManyDrinksToEliminate();
         Log.e("BAC", "DRINKSTOELIMINATE:" + drinksToEliminate);
 
-        // if all the drinks are eliminated, don't bother calculating
+        // if all the drinks are eliminated or none have been entered, don't bother calculating, and set values to 0;
         if (drinksToEliminate >= drinkLog.size()){
             currentBAC = 0.0;
             futureBAC = 0.0;
+            futureSober = 0.00;
             return;
         }
 
@@ -102,9 +96,12 @@ public class CalculatorManager {
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
 
         // Get total hours since first drink
-        double totalHoursSinceFirstDrink = totalMSSinceFirstDrink / 3600000;
+        double totalHoursSinceFirstDrink = (totalMSSinceFirstDrink * 1.0) / 3600000.0;
+        Log.e("BAC", "TOTAL_MS:" + totalMSSinceFirstDrink);
+        Log.e("BAC", "TOTAL_HOURS:" + totalHoursSinceFirstDrink);
 
         double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
+        Log.e("BAC", "ALC-ELIMINATION:" + alcoholElimination);
         currentBAC = totalAlcoholWithWidmark / bodyWater;
         currentBAC = currentBAC - alcoholElimination;
         if(currentBAC <= 0.0){
@@ -121,18 +118,20 @@ public class CalculatorManager {
             totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(drinksToEliminate, drinkLog.size());
             futureBAC = calculateFutureMaxBAC(totalAlcoholWithWidmark);
 
-            // Calculate future BAC time:
-            double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark);
-            numberOfHours = numberOfHours * 3600000;
-            numberOfHours = numberOfHours - totalMSSinceFirstDrink;
-            futureSober = numberOfHours / 3600000;
-
         } else {
 
             // just set it to the current BAC and Current time
             futureBAC = currentBAC;
         }
 
+        /*
+        *****Calculate Future Sober Time*****
+         */
+
+        double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark);
+        futureSober = numberOfHours - totalHoursSinceFirstDrink;
+
+        // Save Preferences to backup
         saveBACPreferences();
     }
 
@@ -197,13 +196,11 @@ public class CalculatorManager {
 
             long differenceTimeBetweenDrinks = nextDrinkTime - firstDrinkTime;
             double differenceInHours = (double) differenceTimeBetweenDrinks / 3600000; // 3600000ms in 1 hour
-            Log.e("BAC", "DIFFERENCEINHOURS" + differenceInHours);
 
             // Calculate your sober time for the drinks
             double alcWithWidmark = getTotalAlcoholWithWidmark(0, i);
             double aFutureSoberTime = calculateFutureSoberTime(alcWithWidmark);
             double differenceBetweenDrinks = aFutureSoberTime - differenceInHours;
-            Log.e("BAC", "Difference-Time-In-Drinks:" + differenceBetweenDrinks);
 
             // If you get a negative difference between the future sober time and the time difference between consuming
             // the drinks, then eliminate the previous drinks, because they are already digested
@@ -271,7 +268,7 @@ public class CalculatorManager {
             String json = gson.toJson(drinkLog.get(i));
             saver.putString(Constants.PREF_DRINK_LOG + i, json);
         }
-        saver.commit();
+        saver.apply();
     }
 
     public static double getAverageAlcoholEliminationRate(){
@@ -284,15 +281,14 @@ public class CalculatorManager {
     }
 
     public static void deleteAllDrinks(){
-
         drinkLog.removeAll(drinkLog); // good code?
-        calculateCurrentAndFutureBAC();
-        futureSober = 0.0;
+        calculateCurrentAndFutureBAC(); // update calculation right away
         saveBACPreferences();
     }
 
     public static void removeDrink(int id){
         drinkLog.remove(id);
+        calculateCurrentAndFutureBAC(); // update calculation right away
     }
 
     public static void setIsMale(boolean b){
