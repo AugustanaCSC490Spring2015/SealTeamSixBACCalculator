@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -127,6 +128,7 @@ public class MainActivity extends ActionBarActivity {
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 CalculatorManager.finishDrink();
+                                Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
                             }
                         } // end anonymous inner class
                         ); // end call to setPositiveButton
