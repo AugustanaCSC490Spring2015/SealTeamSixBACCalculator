@@ -45,7 +45,7 @@ public class DrinkListArrayAdapter extends BaseAdapter {
 
         TextView beerText = (TextView) rowView.findViewById(R.id.beerNameTextView);
         beerText.setText(drinks.get(position).getDrinkName() + ", " + drinks.get(position).getDrinkVolume() + " oz, "
-                + drinks.get(position).getDrinkABV());
+                + drinks.get(position).getDrinkABV() + "% alcohol");
 
 
         return rowView;
