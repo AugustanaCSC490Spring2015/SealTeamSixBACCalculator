@@ -1,5 +1,6 @@
 package edu.augustana.csc490.bac_calculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -126,6 +128,7 @@ public class MainActivity extends ActionBarActivity {
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 CalculatorManager.finishDrink();
+                                Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
                             }
                         } // end anonymous inner class
                         ); // end call to setPositiveButton
@@ -149,6 +152,7 @@ public class MainActivity extends ActionBarActivity {
 
         drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
         drinkListView.setAdapter(drinkAdapter);
+        drinkAdapter.notifyDataSetChanged();
         drinkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -269,6 +273,12 @@ public class MainActivity extends ActionBarActivity {
 
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        drinkAdapter.notifyDataSetChanged();
     }
 
     @Override
