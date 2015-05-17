@@ -113,40 +113,42 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                if (CalculatorManager.isDrinkUnfinished()) {
+                    // add dialog to confirm that they finished the drink
+                    DialogFragment finishedDrinkDialog = new DialogFragment() {
+                        // create an AlertDialog and return it
+                        @Override
+                        public Dialog onCreateDialog(Bundle bundle){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setCancelable(false);
 
-                // add dialog to confirm that they finished the drink
-                DialogFragment finishedDrinkDialog = new DialogFragment() {
-                    // create an AlertDialog and return it
-                    @Override
-                    public Dialog onCreateDialog(Bundle bundle){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setCancelable(false);
+                            builder.setMessage("Did you finish your drink?");
 
-                        builder.setMessage("Did you finish your drink?");
+                            // "Reset Quiz" Button
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    CalculatorManager.finishDrink();
+                                    Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
+                                }
+                            } // end anonymous inner class
+                            ); // end call to setPositiveButton
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                                        public void onClick(DialogInterface dialog, int id){
+                                            dismiss();
+                                        }
 
-                        // "Reset Quiz" Button
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                CalculatorManager.finishDrink();
-                                Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
-                            }
-                        } // end anonymous inner class
-                        ); // end call to setPositiveButton
-                        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                dismiss();
-                            }
+                                    }
+                            );
 
-                        }
-                        );
+                            return builder.create(); // return the AlertDialog
+                        } // end method onCreateDialog
+                    }; // end DialogFragment anonymous inner class
 
-                        return builder.create(); // return the AlertDialog
-                    } // end method onCreateDialog
-                }; // end DialogFragment anonymous inner class
-
-                // use FragmentManager to display the DialogFragment
-                finishedDrinkDialog.show(getFragmentManager(), "Confirm Finished Drink");
-
+                    // use FragmentManager to display the DialogFragment
+                    finishedDrinkDialog.show(getFragmentManager(), "Confirm Finished Drink");
+                } else {
+                    Toast.makeText(MainActivity.this, "No Unfinished Drinks", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
