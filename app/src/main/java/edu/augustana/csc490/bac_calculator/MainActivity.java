@@ -1,5 +1,6 @@
 package edu.augustana.csc490.bac_calculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -149,6 +150,7 @@ public class MainActivity extends ActionBarActivity {
 
         drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
         drinkListView.setAdapter(drinkAdapter);
+        drinkAdapter.notifyDataSetChanged();
         drinkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
