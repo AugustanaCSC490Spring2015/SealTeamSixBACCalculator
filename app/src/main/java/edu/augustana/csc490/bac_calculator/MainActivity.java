@@ -82,7 +82,15 @@ public class MainActivity extends ActionBarActivity {
                             switch (which) {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
-                                    new AddDrinkDialog(MainActivity.this).show();
+                                    AddDrinkDialog addDrinkDialog = new AddDrinkDialog(MainActivity.this);
+                                    addDrinkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            drinkAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                    addDrinkDialog.show();
+
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
@@ -94,13 +102,6 @@ public class MainActivity extends ActionBarActivity {
                         }
                     });
                     builder.create().show();
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            drinkAdapter.notifyDataSetChanged();
-                        }
-                    });
-
                 }
 
             }
