@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -197,51 +198,51 @@ public class MainActivity extends ActionBarActivity {
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
                         Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
-                        soberIn.setText((int) Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int) ((CalculatorManager.getFutureSoberTime() % 1) * 100));
+                        soberIn.setText((int) Math.floor(CalculatorManager.getFutureSoberTime()) + "." + (int) ((CalculatorManager.getFutureSoberTime() % 1) * 100)+" hr");
 
 
                         //graph view
-                        // example data for testing
-                        /** Graph View
-                         * example data for testing
-                         * @TODO: integrate real data
-                         */
-
-                        Calendar calendar = Calendar.getInstance();
                         GraphView graph = (GraphView) findViewById(R.id.graph);
-                        graph.removeAllSeries();
+                        graph.removeAllSeries(); // clear last graph
                         LineGraphSeries<DataPoint> series;
-                        DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 3];
+                        DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 2];
 
+                        // If there are drinks in the log
                         if (CalculatorManager.getDrinkLogSize() > 0) {
-                            dataPoints[0] = new DataPoint(CalculatorManager.getDrink(0).getDrinkStartedCalendar().getTime(), 0.00); // first Drink Start time
+                            // Get first data point
+                            dataPoints[0] = new DataPoint(
+                                    CalculatorManager.getDrink(0).getDrinkStartedCalendar().getTime(),
+                                    0
+                            );
 
-                            //add drink end times
-                            for (int i = 0; i < CalculatorManager.getDrinkLogSize() - 1; i++) { // all drinks execpt the last one
-                                dataPoints[i + 1] = new DataPoint(CalculatorManager.getDrink(i + 1).getDrinkStartedCalendar().getTime(), CalculatorManager.caluclateASimpleFutureBAC(0, i + 1));
-                                Log.e("BAC", "SIMPLEFUTBAC:" + CalculatorManager.caluclateASimpleFutureBAC(0, i + 1));
+                            // Make data points for all other drink start times
+                            for (int i=1; i < CalculatorManager.getDrinkLogSize(); i++) {
+                                dataPoints[i] = new DataPoint(
+                                        CalculatorManager.getDrink(i).getDrinkStartedCalendar().getTime(),
+                                        CalculatorManager.calculateASimpleFutureBAC(0, i)
+                                );
                             }
-                            Drink latestDrink = CalculatorManager.getDrink(CalculatorManager.getDrinkLogSize() - 1);
-                            if (!latestDrink.isDrinkFinished()) {
-                                dataPoints[CalculatorManager.getDrinkLogSize()] = new DataPoint(latestDrink.getDrinkStartedCalendar().getTime(), CalculatorManager.caluclateASimpleFutureBAC(0, CalculatorManager.getDrinkLogSize() - 1));
-                            } else {
-                                dataPoints[CalculatorManager.getDrinkLogSize()] = new DataPoint(calendar.getTime(), CalculatorManager.getCurrentBAC());
-                            }
 
-                            long futureBACLong = calendar.getTimeInMillis() + 1200000; // adds 20 minutes to current time
-                            Calendar futureBACMaxTime = Calendar.getInstance();
-                            futureBACMaxTime.setTimeInMillis(futureBACLong);
-                            dataPoints[CalculatorManager.getDrinkLogSize() + 1] = new DataPoint(futureBACMaxTime.getTime(), CalculatorManager.getFutureBAC());
+                            // Add Max BAC Data Point
+                            int lastDataPointIndex = CalculatorManager.getDrinkLogSize();
+                            dataPoints[lastDataPointIndex] = new DataPoint(
+                                    CalculatorManager.getDrink(lastDataPointIndex-1).getDrinkEndedCalendar().getTime(),
+                                    CalculatorManager.calculateASimpleFutureBAC(0, lastDataPointIndex)
+                            );
 
-                            // Last entry is future sober time
-                            long futureSoberLong = calendar.getTimeInMillis() + (long) (CalculatorManager.getFutureSoberTime() * 3600000.0);
+                            // Add Sober Data point
+                            lastDataPointIndex++;
+                            Calendar calendar = Calendar.getInstance();
+                            final long futureSoberLong = calendar.getTimeInMillis() + (long) (CalculatorManager.getFutureSoberTime() * 3600000.0);
                             Calendar soberCalendarTime = Calendar.getInstance();
                             soberCalendarTime.setTimeInMillis(futureSoberLong);
+                            dataPoints[lastDataPointIndex] = new DataPoint(
+                                    soberCalendarTime.getTime(),
+                                    0
+                            );
 
-                            dataPoints[CalculatorManager.getDrinkLogSize() + 2] = new DataPoint(soberCalendarTime.getTime(), 0.00);
-
+                            // Add data to graph
                             series = new LineGraphSeries<>(dataPoints);
-
                             series.setColor(getResources().getColor(R.color.graph_line_color));
                             graph.addSeries(series);
 
@@ -250,11 +251,22 @@ public class MainActivity extends ActionBarActivity {
                             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext(), dateFormat));
                             graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
+                            // set y-axis formats
+                            graph.getGridLabelRenderer().setNumVerticalLabels(5);
+
                             // graph viewport settings
-                            graph.getViewport().setMinX(dataPoints[0].getX() - 0.15);
-                            graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - 1);
+                            Date d1 = cal.getTime();
+                            cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 2);
+                            Date d2 = cal.getTime();
+
+                            // x-axis viewport
                             graph.getViewport().setXAxisBoundsManual(true);
-                            graph.getViewport().setMinY(0.0);
+                            graph.getViewport().setMinX(d1.getTime());
+                            graph.getViewport().setMaxX(d2.getTime());
+
+                            // Compute y-axis units
                             double largestBAC = 0;
                             for (int i = 0; i < dataPoints.length; i++) {
                                 if (dataPoints[i].getY() > largestBAC) {
@@ -264,10 +276,15 @@ public class MainActivity extends ActionBarActivity {
                             largestBAC += 0.01;
                             BigDecimal bd = new BigDecimal(largestBAC);
                             BigDecimal roundedDouble = bd.setScale(2, BigDecimal.ROUND_UP);
-                            graph.getViewport().setMaxY(roundedDouble.doubleValue());
-                            graph.getGridLabelRenderer().setNumVerticalLabels(5);
+
+                            // y-axis viewport
                             graph.getViewport().setYAxisBoundsManual(true);
-                            graph.getViewport().setScalable(true);
+                            graph.getViewport().setMinY(0.0);
+                            graph.getViewport().setMaxY(roundedDouble.doubleValue());
+
+                            // enable/disable other settings
+                            graph.getViewport().setScalable(false);
+                            graph.getViewport().setScrollable(true);
                         }
                     }
                 });

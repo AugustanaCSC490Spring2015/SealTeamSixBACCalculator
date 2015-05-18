@@ -210,7 +210,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
                     // if no end time is entered, assume 20 minutes and it will be corrected when
                     // the user clicks the finish drink button
                     if (drinkFinishedCheckBox.isChecked()) {
-                        drinkFinishedCalendar = drinkStartedCalendar;
+                        drinkFinishedCalendar = Calendar.getInstance();
                         drinkFinishedCalendar.set(Calendar.MINUTE, drinkFinishedCalendar.get(Calendar.MINUTE) + 20);
                     }
 

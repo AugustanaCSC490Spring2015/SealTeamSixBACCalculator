@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="label_value_color">#474747</color>
-    <color name="graph_line_color">#CC4040</color>
+    <color name="graph_line_color">#ff4792cc</color>
 </resources>

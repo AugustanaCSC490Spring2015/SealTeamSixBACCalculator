@@ -152,7 +152,7 @@ public class CalculatorManager {
         return totalAlcoholWithWidmark;
     }
 
-    public static double caluclateASimpleFutureBAC(int start, int end){
+    public static double calculateASimpleFutureBAC(int start, int end){
         double totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(start, end);
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
 
