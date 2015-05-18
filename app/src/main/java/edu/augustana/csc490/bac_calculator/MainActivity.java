@@ -205,10 +205,17 @@ public class MainActivity extends ActionBarActivity {
                         // convert the sober time Double to String to parse out Hours and Minutes
                         formatter = new DecimalFormat("#0.00");
                         String soberDoubleString = formatter.format(CalculatorManager.getFutureSoberTime());
-                        soberIn.setText(soberDoubleString.substring(0, (soberDoubleString.length() - 3)) + ":" + (Integer.valueOf(soberDoubleString.substring(soberDoubleString.length() - 2, soberDoubleString.length())) * 60) / 100);
+                        Log.e("BAC", "SOBER_TIME:" +CalculatorManager.getFutureSoberTime() );
+                        String hour = soberDoubleString.substring(0, soberDoubleString.length() - 3);
+                        String minute = Integer.toString((Integer.parseInt(soberDoubleString.substring(soberDoubleString.length() - 2,soberDoubleString.length())) * 60) / 100);
+                        if (minute.length()==1){
+                            minute = "0"+minute;
+                        }
+                        soberIn.setText(hour + ":" + minute);
                         //graph view
                         GraphView graph = (GraphView) findViewById(R.id.graph);
                         graph.removeAllSeries(); // clear last graph
+
                         LineGraphSeries<DataPoint> series;
                         DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 2];
 
