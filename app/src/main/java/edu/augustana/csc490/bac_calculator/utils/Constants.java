@@ -1,14 +1,18 @@
 package edu.augustana.csc490.bac_calculator.utils;
 
 /**
- * Created by Dan on 4/19/15.
+ * Constants class is used to store values that do not change used by the App and API. It differs
+ * from Strings.xml as the user will never see any of these strings and are only used by the app.
  */
 public class Constants {
 
+    // Untappd API
     public static final String CLIENT_ID = "5BA3BD63DC25DE480F4C713D83F7A879233B660D";
     public static final String REDIRECT_URL = "http://danshultz.com";
     public static final String UNTAPPD_API_URL = "https://api.untappd.com/v4/";
-    public static final String UNTAPPD_AUTH_URL = "https://untappd.com/oauth/authenticate/?client_id=" + CLIENT_ID +"&response_type=token&redirect_url=" + REDIRECT_URL;
+    public static final String UNTAPPD_AUTH_URL = "https://untappd.com/oauth/authenticate/?client_id=" + CLIENT_ID + "&response_type=token&redirect_url=" + REDIRECT_URL;
+    public static final String ENDPOINT_USER_INFO = "user/info/";  //Endpoint: https://api.untappd.com/v4/user/info/USERNAME
+    public static final String ENDPOINT_BEER_SEARCH = "search/beer"; // Endpoint: https://api.untappd.com/v4/search/beer/
 
     // Preferences
     public static final String PREF_FILE = "SealTeamSixBACCalc";
@@ -45,18 +49,8 @@ public class Constants {
     // BAC Constants
     public static final double WIDMARKS_CONSTANT = 0.8;
     public static final double OUNCES_IN_POUNDS = 16.0;
-    public static final double GRAMS_IN_KILOGRAMS = 1000.0;
+
     // Body Water Constants
     public static final double MALE_CONSTANT = 0.68;     // (L/Kg)
     public static final double FEMALE_CONSTANT = 0.55;   // (L/Kg)
-
-    /**
-     * Endpoints
-     * Format UNTAPPD_API_URL + Endpoint
-      */
-    //https://api.untappd.com/v4/user/info/USERNAME
-    public static final String ENDPOINT_USER_INFO = "user/info/";
-    //https://api.untappd.com/v4/search/beer/
-    public static final String ENDPOINT_BEER_SEARCH = "search/beer";
-
 }
