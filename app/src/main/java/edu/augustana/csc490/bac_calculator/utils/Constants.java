@@ -26,6 +26,7 @@ public class Constants {
     public static final String PREF_DRINK_LOG = "drinkLog";
     public static final String PREF_DRINK_LOG_SIZE = "drinkLogSize";
     public static final String PREF_HOW_MUCH_ATE = "howMuchAte";
+    public static final String PREF_DISCLAIMER = "disclaimer";
 
     // JSON TAGS
     public static final String TAG_RESPONSE = "response";

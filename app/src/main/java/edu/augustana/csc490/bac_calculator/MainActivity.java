@@ -46,14 +46,22 @@ public class MainActivity extends ActionBarActivity {
     TextView currentBAC, futureBAC, soberIn;
     ListView drinkListView;
     DrinkListArrayAdapter drinkAdapter;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Load preferences
+        sharedPreferences = getSharedPreferences(Constants.PREF_FILE, MODE_PRIVATE);
+
+        // Calculator Manager Preferences
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
+
+        // show disclaimer
+        showDisclaimer();
 
         // get references to layout components
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
@@ -268,6 +276,32 @@ public class MainActivity extends ActionBarActivity {
 
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
+    }
+
+    /**
+     * Show disclaimer on app's first run
+     */
+    private void showDisclaimer() {
+        Boolean isFirstRun = sharedPreferences.getBoolean(Constants.PREF_DISCLAIMER, true);
+
+        // Check if app's first run
+        if (isFirstRun) {
+            //show disclaimer
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(getString(R.string.disclaimer_title));
+            builder.setMessage(getString(R.string.disclaimer));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.disclaimer_button), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // close window
+                }
+            });
+            builder.create().show();
+
+            // store in preferences
+            sharedPreferences.edit().putBoolean(Constants.PREF_DISCLAIMER, false).commit();
+        }
     }
 
     /**

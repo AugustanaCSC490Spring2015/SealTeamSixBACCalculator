@@ -49,4 +49,12 @@
     <string name="developed_by_text">Developed By:</string>
     <string name="about_formulas">Formulas: \n xxxxxxxxxxxxxxxxx</string>
     <string name="sources_text">Sources: \n xxxxxx.com</string>
+    <string name="disclaimer">
+        Always Drink Responsibly\n\n
+        This app uses several factors to estimate your BAC. It is not a legal or exact measurement!\n\n
+        The Developers of this application assume no responsibility for any user actions or outcomes.\n\n
+        Use at your own risk.
+    </string>
+    <string name="disclaimer_title">Disclaimer</string>
+    <string name="disclaimer_button">Accept</string>
 </resources>
