@@ -248,7 +248,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
 
                 // add drink to arrayList and close dialog box
                 // TODO: check the times, and place drink in correct order
-                CalculatorManager.drinkLog.add(startedDrink);
+                CalculatorManager.addDrink(startedDrink);
 
                 dismiss();
 

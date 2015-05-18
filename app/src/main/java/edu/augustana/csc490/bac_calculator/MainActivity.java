@@ -3,7 +3,6 @@ package edu.augustana.csc490.bac_calculator;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,12 +22,11 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
+
 
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
         futureBAC = (TextView) findViewById(R.id.future_BAC_value);
@@ -110,7 +108,6 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-
                 // add dialog to confirm that they finished the drink
                 DialogFragment finishedDrinkDialog = new DialogFragment() {
                     // create an AlertDialog and return it
@@ -146,7 +143,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.drinkLog);
+        drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.getDrinkLog());
         drinkListView.setAdapter(drinkAdapter);
         drinkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -170,82 +167,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        //graph view
-        // example data for testing
-        /** Graph View
-         * example data for testing
-         * @TODO: integrate real data
-         */
-
-        ArrayList<Date> exampleDates = new ArrayList<Date>();
-        Calendar calendar = Calendar.getInstance();
-        for (int i = 0; i < 6; i++) {
-            exampleDates.add(calendar.getTime());
-            calendar.add(Calendar.MINUTE, 30);
-        }
-
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(exampleDates.get(0), 0.02),
-                new DataPoint(exampleDates.get(1), 0.04),
-                new DataPoint(exampleDates.get(2), 0.07),
-                new DataPoint(exampleDates.get(3), 0.09),
-                new DataPoint(exampleDates.get(4), 0.10),
-                new DataPoint(exampleDates.get(5), 0.11)
-        });
-        graph.addSeries(series);
-        series.setColor(getResources().getColor(R.color.graph_line_color));
-
-
-       /* *//**
-         * formattedDates is an ArrayList of the dates formatted to show just the
-         * month, day, and time
-         *//*
-        ArrayList<String> formattedDates = new ArrayList<String>();
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd hh:mm a");
-        for (int i = 0; i < 6; i++) {
-            formattedDates.add(formatter.format(exampleDates.get(i)));
-        }
-
-        *//** ArrayList RecentList contains the # most recent entries as strings,
-         * including the date/time and the BAC value
-         *//*
-        ArrayList<String> RecentList = new ArrayList<String>();
-        RecentList.add(formattedDates.get(0) + "  -  " + "0.11");
-        RecentList.add(formattedDates.get(1) + "  -  " + "0.10");
-        RecentList.add(formattedDates.get(2) + "  -  " + "0.09");
-        RecentList.add(formattedDates.get(3) + "  -  " + "0.07");
-        RecentList.add(formattedDates.get(4) + "  -  " + "0.04");
-        RecentList.add(formattedDates.get(5) + "  -  " + "0.02");
-
-
-        /** arrayAdapter adapts RecentList to the dashboard list view lv
-
-        ListView lv = (ListView) findViewById(R.id.drinkListView);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.dashboard_list_item,
-                RecentList);
-
-        lv.setAdapter(arrayAdapter);
-        */
-
-        // set date x-axis label formatter
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, dateFormat));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
-
-        // graph viewport settings
-        graph.getViewport().setMinX(exampleDates.get(1).getTime());
-        graph.getViewport().setMaxX(exampleDates.get(4).getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinY(0.0);
-        graph.getViewport().setMaxY(0.3);
-        graph.getGridLabelRenderer().setNumVerticalLabels(4);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setScalable(true);
-
         TimerTask updateBAC = new TimerTask() {
             @Override
             public void run() {
@@ -260,9 +181,80 @@ public class MainActivity extends ActionBarActivity {
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
                         Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
                         soberIn.setText((int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
+
+
+                        //graph view
+                        // example data for testing
+                        /** Graph View
+                         * example data for testing
+                         * @TODO: integrate real data
+                         */
+
+                        Calendar calendar = Calendar.getInstance();
+                        GraphView graph = (GraphView) findViewById(R.id.graph);
+                        graph.removeAllSeries();
+                        LineGraphSeries<DataPoint> series;
+                        DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 3];
+
+                        if (CalculatorManager.getDrinkLogSize()>0) {
+                            dataPoints[0] = new DataPoint(CalculatorManager.getDrink(0).getDrinkStartedCalendar().getTime(), 0.00); // first Drink Start time
+
+                            //add drink end times
+                            for (int i = 0; i < CalculatorManager.getDrinkLogSize() - 1; i++) { // all drinks execpt the last one
+                                dataPoints[i + 1] = new DataPoint(CalculatorManager.getDrink(i + 1).getDrinkStartedCalendar().getTime(), CalculatorManager.caluclateASimpleFutureBAC(0, i + 1));
+                                Log.e("BAC", "SIMPLEFUTBAC:" + CalculatorManager.caluclateASimpleFutureBAC(0, i + 1));
+                            }
+                            Drink latestDrink = CalculatorManager.getDrink(CalculatorManager.getDrinkLogSize() - 1);
+                            if (!latestDrink.isDrinkFinished()) {
+                                dataPoints[CalculatorManager.getDrinkLogSize()] = new DataPoint(latestDrink.getDrinkStartedCalendar().getTime(), CalculatorManager.caluclateASimpleFutureBAC(0, CalculatorManager.getDrinkLogSize() - 1));
+                            } else {
+                                dataPoints[CalculatorManager.getDrinkLogSize()] = new DataPoint(calendar.getTime(), CalculatorManager.getCurrentBAC());
+                            }
+
+                            long futureBACLong = calendar.getTimeInMillis() + 1200000; // adds 20 minutes to current time
+                            Calendar futureBACMaxTime = Calendar.getInstance();
+                            futureBACMaxTime.setTimeInMillis(futureBACLong);
+                            dataPoints[CalculatorManager.getDrinkLogSize() + 1] = new DataPoint(futureBACMaxTime.getTime(), CalculatorManager.getFutureBAC());
+
+                            // Last entry is future sober time
+                            long futureSoberLong = calendar.getTimeInMillis() + (long) (CalculatorManager.getFutureSoberTime() * 3600000.0);
+                            Calendar soberCalendarTime = Calendar.getInstance();
+                            soberCalendarTime.setTimeInMillis(futureSoberLong);
+
+                            dataPoints[CalculatorManager.getDrinkLogSize() + 2] = new DataPoint(soberCalendarTime.getTime(), 0.00);
+
+                            series = new LineGraphSeries<>(dataPoints);
+
+                            series.setColor(getResources().getColor(R.color.graph_line_color));
+                            graph.addSeries(series);
+
+                            // set date x-axis label formatter
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext(), dateFormat));
+                            graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+
+                            // graph viewport settings
+                            graph.getViewport().setMinX(dataPoints[0].getX());
+                            graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
+                            graph.getViewport().setXAxisBoundsManual(true);
+                            graph.getViewport().setMinY(0.0);
+                            double largestBAC = 0;
+                            for (int i = 0; i < dataPoints.length; i++) {
+                                if (dataPoints[i].getY() > largestBAC) {
+                                    largestBAC = dataPoints[i].getY();
+                                }
+                            }
+                            largestBAC += 0.01;
+                            BigDecimal bd = new BigDecimal(largestBAC);
+                            BigDecimal roundedDouble = bd.setScale(2, BigDecimal.ROUND_UP);
+                            graph.getViewport().setMaxY(roundedDouble.doubleValue());
+                            graph.getGridLabelRenderer().setNumVerticalLabels(5);
+                            graph.getViewport().setYAxisBoundsManual(true);
+                            graph.getViewport().setScalable(true);
+                        }
+
                     }
                 });
-
             }
         };
 
