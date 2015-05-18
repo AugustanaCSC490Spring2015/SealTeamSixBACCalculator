@@ -47,8 +47,19 @@
          Abdul Merhi\nCaitlin Loney\nChristian Schroeder\nDan Shultz\nHorus Cuevas\nLindsey Nicolaysen
     </string>
     <string name="developed_by_text">Developed By:</string>
-    <string name="about_formulas">Formulas: \n xxxxxxxxxxxxxxxxx</string>
-    <string name="sources_text">Sources: \n xxxxxx.com</string>
+    <string name="about_formulas">
+        Formulas: \n
+        ((A*0.8*z)/Wr)-Bt=Ct\n
+        A: number of drinks consumed\n
+        W: body weight (ounces)\n
+        r: body water distribution constant\n
+        (L/Kg)\n
+        Ct: BAC (Kg/L)\n
+        B: alcohol elimination rate (Kg/L/hr)\n
+        t: time since first drink (hours)\n
+        0.8: Widmark\'s constant\n
+        z: fluid ounces of alcohol/drink
+    </string>
     <string name="disclaimer">
         Always Drink Responsibly\n\n
         This app uses several factors to estimate your BAC. It is not a legal or exact measurement!\n\n
