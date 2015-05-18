@@ -1,5 +1,6 @@
 package edu.augustana.csc490.bac_calculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -52,7 +54,6 @@ public class MainActivity extends ActionBarActivity {
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
 
-
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
         futureBAC = (TextView) findViewById(R.id.future_BAC_value);
         soberIn = (TextView) findViewById(R.id.sober_in_value);
@@ -80,7 +81,15 @@ public class MainActivity extends ActionBarActivity {
                             switch (which) {
                                 case 0: // Manually add drink
                                     // Show manual add drink dialog
-                                    new AddDrinkDialog(MainActivity.this).show();
+                                    AddDrinkDialog addDrinkDialog = new AddDrinkDialog(MainActivity.this);
+                                    addDrinkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            drinkAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                    addDrinkDialog.show();
+
                                     break;
                                 case 1: // Search Untappd
                                     Intent intent = new Intent(MainActivity.this, UntappdSearchActivity.class);
@@ -92,13 +101,6 @@ public class MainActivity extends ActionBarActivity {
                         }
                     });
                     builder.create().show();
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            drinkAdapter.notifyDataSetChanged();
-                        }
-                    });
-
                 }
 
             }
@@ -108,43 +110,48 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                // add dialog to confirm that they finished the drink
-                DialogFragment finishedDrinkDialog = new DialogFragment() {
-                    // create an AlertDialog and return it
-                    @Override
-                    public Dialog onCreateDialog(Bundle bundle){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setCancelable(false);
+                if (CalculatorManager.isDrinkUnfinished()) {
+                    // add dialog to confirm that they finished the drink
+                    DialogFragment finishedDrinkDialog = new DialogFragment() {
+                        // create an AlertDialog and return it
+                        @Override
+                        public Dialog onCreateDialog(Bundle bundle){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setCancelable(false);
 
-                        builder.setMessage("Did you finish your drink?");
+                            builder.setMessage("Did you finish your drink?");
 
-                        // "Reset Quiz" Button
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                CalculatorManager.finishDrink();
-                            }
-                        } // end anonymous inner class
-                        ); // end call to setPositiveButton
-                        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                dismiss();
-                            }
+                            // "Reset Quiz" Button
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    CalculatorManager.finishDrink();
+                                    Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
+                                }
+                            } // end anonymous inner class
+                            ); // end call to setPositiveButton
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                                        public void onClick(DialogInterface dialog, int id){
+                                            dismiss();
+                                        }
 
-                        }
-                        );
+                                    }
+                            );
 
-                        return builder.create(); // return the AlertDialog
-                    } // end method onCreateDialog
-                }; // end DialogFragment anonymous inner class
+                            return builder.create(); // return the AlertDialog
+                        } // end method onCreateDialog
+                    }; // end DialogFragment anonymous inner class
 
-                // use FragmentManager to display the DialogFragment
-                finishedDrinkDialog.show(getFragmentManager(), "Confirm Finished Drink");
-
+                    // use FragmentManager to display the DialogFragment
+                    finishedDrinkDialog.show(getFragmentManager(), "Confirm Finished Drink");
+                } else {
+                    Toast.makeText(MainActivity.this, "No Unfinished Drinks", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.getDrinkLog());
         drinkListView.setAdapter(drinkAdapter);
+        drinkAdapter.notifyDataSetChanged();
         drinkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -255,11 +262,18 @@ public class MainActivity extends ActionBarActivity {
 
                     }
                 });
+
             }
         };
 
         Timer timer = new Timer("Update BAC");
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        drinkAdapter.notifyDataSetChanged();
     }
 
     @Override

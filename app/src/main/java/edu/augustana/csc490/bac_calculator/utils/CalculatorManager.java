@@ -132,6 +132,18 @@ public class CalculatorManager {
         saveBACPreferences();
     }
 
+    public static boolean isDrinkUnfinished() {
+        if (drinkLog.size() > 0) {
+            Drink latestDrink = drinkLog.get(drinkLog.size() - 1);
+            if (latestDrink.isDrinkFinished()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static double getTotalAlcoholWithWidmark(int start, int end){
         double totalAlcoholWithWidmark = 0.0;
         for (int i=start; i<end; i++){

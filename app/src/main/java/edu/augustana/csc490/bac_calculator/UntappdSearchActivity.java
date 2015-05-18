@@ -3,6 +3,8 @@ package edu.augustana.csc490.bac_calculator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 import edu.augustana.csc490.bac_calculator.utils.GetJSON;
 import edu.augustana.csc490.bac_calculator.utils.UntappdSearchListAdapter;
@@ -68,7 +71,18 @@ public class UntappdSearchActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UntappdBeer selectedBeer = beers.get(i);
-                new AddDrinkDialog(UntappdSearchActivity.this, selectedBeer.getBeerName(), selectedBeer.getBeerABV()).show();
+                AddDrinkDialog addDrinkDialog = new AddDrinkDialog(UntappdSearchActivity.this, selectedBeer.getBeerName(), selectedBeer.getBeerABV());
+                final int numDrinks = CalculatorManager.drinkLog.size();
+                addDrinkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        // If a new drink was added, return to dashboard
+                        if (CalculatorManager.drinkLog.size()>numDrinks) {
+                            finish();
+                        }
+                    }
+                });
+                addDrinkDialog.show();
             }
         });
 
