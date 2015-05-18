@@ -205,7 +205,6 @@ public class MainActivity extends ActionBarActivity {
                         // convert the sober time Double to String to parse out Hours and Minutes
                         formatter = new DecimalFormat("#0.00");
                         String soberDoubleString = formatter.format(CalculatorManager.getFutureSoberTime());
-                        Log.e("BAC", "SOBER_TIME:" +CalculatorManager.getFutureSoberTime() );
                         String hour = soberDoubleString.substring(0, soberDoubleString.length() - 3);
                         String minute = Integer.toString((Integer.parseInt(soberDoubleString.substring(soberDoubleString.length() - 2,soberDoubleString.length())) * 60) / 100);
                         if (minute.length()==1){
@@ -220,7 +219,7 @@ public class MainActivity extends ActionBarActivity {
                         DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 2];
 
                         // If there are drinks in the log
-                        if (CalculatorManager.getDrinkLogSize() > 0) {
+                        if (CalculatorManager.getHowManyDrinksToEliminate() < CalculatorManager.getDrinkLogSize()) {
                             // Get first data point
                             dataPoints[0] = new DataPoint(
                                     CalculatorManager.getDrink(0).getDrinkStartedCalendar().getTime(),

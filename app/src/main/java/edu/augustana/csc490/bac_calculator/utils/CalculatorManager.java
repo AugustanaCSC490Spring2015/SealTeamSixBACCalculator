@@ -205,7 +205,7 @@ public class CalculatorManager {
     // need to check to see if a drink is completely eliminated from the blood stream -
     // this would be when you have a drink, and your body metabolizes it completely
     // before the next drink
-    private static int getHowManyDrinksToEliminate() {
+    public static int getHowManyDrinksToEliminate() {
 
         /*
         Traverse through the drinkLog, detecting if a drink is fully digested by calculating the sober time starting from
