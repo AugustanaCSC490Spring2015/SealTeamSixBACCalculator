@@ -19,9 +19,9 @@ public class CalculatorManager {
     private static boolean isMale;
     private static double currentBAC;
     private static double futureBAC;
-    private static double futureSober; // time in a Double format
+    private static double futureSoberTime; // time in a Double format
 
-    public static ArrayList<Drink> drinkLog;
+    private static ArrayList<Drink> drinkLog;
     public static Map<Calendar, Double> BACHistory;
 
     // SharedPreferences stuff
@@ -53,7 +53,7 @@ public class CalculatorManager {
         if (drinksToEliminate >= drinkLog.size()){
             currentBAC = 0.0;
             futureBAC = 0.0;
-            futureSober = 0.00;
+            futureSoberTime = 0.00;
             return;
         }
 
@@ -97,11 +97,8 @@ public class CalculatorManager {
 
         // Get total hours since first drink
         double totalHoursSinceFirstDrink = (totalMSSinceFirstDrink * 1.0) / 3600000.0;
-        Log.e("BAC", "TOTAL_MS:" + totalMSSinceFirstDrink);
-        Log.e("BAC", "TOTAL_HOURS:" + totalHoursSinceFirstDrink);
 
         double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
-        Log.e("BAC", "ALC-ELIMINATION:" + alcoholElimination);
         currentBAC = totalAlcoholWithWidmark / bodyWater;
         currentBAC = currentBAC - alcoholElimination;
         if(currentBAC <= 0.0){
@@ -116,7 +113,7 @@ public class CalculatorManager {
 
             // Pull drinks from arraylist and calculate future BAC:
             totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(drinksToEliminate, drinkLog.size());
-            futureBAC = calculateFutureMaxBAC(totalAlcoholWithWidmark);
+            futureBAC = calculateFutureMaxBAC(totalAlcoholWithWidmark, totalMSSinceFirstDrink);
 
         } else {
 
@@ -128,8 +125,8 @@ public class CalculatorManager {
         *****Calculate Future Sober Time*****
          */
 
-        double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark);
-        futureSober = numberOfHours - totalHoursSinceFirstDrink;
+        double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark, totalMSSinceFirstDrink);
+        futureSoberTime = numberOfHours;
 
         // Save Preferences to backup
         saveBACPreferences();
@@ -155,7 +152,27 @@ public class CalculatorManager {
         return totalAlcoholWithWidmark;
     }
 
-    private static long getCurrentTimeInMS(){
+    public static double caluclateASimpleFutureBAC(int start, int end){
+        double totalAlcoholWithWidmark = getTotalAlcoholWithWidmark(start, end);
+        double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
+
+        // Get total hours since first drink
+        double totalHoursSinceFirstDrink;
+        if (end - start == 0 || !drinkLog.get(end - 1).isDrinkFinished()){
+            totalHoursSinceFirstDrink = getCurrentTimeInMS() - drinkLog.get(getHowManyDrinksToEliminate()).getDrinkStartedCalendar().getTimeInMillis();
+        } else {
+            totalHoursSinceFirstDrink = drinkLog.get(end - 1).getDrinkStartedCalendar().getTimeInMillis() - (drinkLog.get(0).getDrinkStartedCalendar().getTimeInMillis() * 1.0);
+        }
+        totalHoursSinceFirstDrink =  (totalHoursSinceFirstDrink * 1.0) / 3600000.0;
+        double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
+
+        double BAC = totalAlcoholWithWidmark / bodyWater;
+
+        BAC = BAC - alcoholElimination;
+        return BAC;
+    }
+
+    public static long getCurrentTimeInMS(){
         Calendar currentTimeCalendar = Calendar.getInstance();
         return currentTimeCalendar.getTimeInMillis();
     }
@@ -211,7 +228,7 @@ public class CalculatorManager {
 
             // Calculate your sober time for the drinks
             double alcWithWidmark = getTotalAlcoholWithWidmark(0, i);
-            double aFutureSoberTime = calculateFutureSoberTime(alcWithWidmark);
+            double aFutureSoberTime = calculateFutureSoberTime(alcWithWidmark, differenceTimeBetweenDrinks);
             double differenceBetweenDrinks = aFutureSoberTime - differenceInHours;
 
             // If you get a negative difference between the future sober time and the time difference between consuming
@@ -225,18 +242,22 @@ public class CalculatorManager {
         return 0;
     }
 
-    public static double calculateFutureSoberTime(double totalAlcoholWithWidmark){
+    private static double calculateFutureSoberTime(double totalAlcoholWithWidmark, long totalMSSinceFirstDrink){
 
         //http://www.wsp.wa.gov/breathtest/docs/webdms/Studies_Articles/Widmarks%20Equation%2009-16-1996.pdf
 
-        futureSober = calculateFutureMaxBAC(totalAlcoholWithWidmark);
+        double futureSober = calculateFutureMaxBAC(totalAlcoholWithWidmark, totalMSSinceFirstDrink);
         // next step is to subtract BAC, but we want BAC=0, so we subtract 0
-        return (futureSober / getAverageAlcoholEliminationRate());
+        futureSober = (futureSober / getAverageAlcoholEliminationRate());
+        return futureSober;
     }
 
-    private static double calculateFutureMaxBAC(double alcoholWithWidmarkConstant){
+    private static double calculateFutureMaxBAC(double alcoholWithWidmarkConstant, long totalMSSinceFirstDrink){
         double bodyWater = weightInPounds * Constants.OUNCES_IN_POUNDS * getWaterConstant();
-        return (alcoholWithWidmarkConstant / bodyWater);
+        double totalHoursSinceFirstDrink = (totalMSSinceFirstDrink * 1.0) / 3600000.0;
+        double alcoholElimination = (getAverageAlcoholEliminationRate()) * totalHoursSinceFirstDrink;
+        double BAC =  (alcoholWithWidmarkConstant / bodyWater);
+        return BAC - alcoholElimination;
     }
 
     // Gets body water distribution that depends on male/female
@@ -276,11 +297,11 @@ public class CalculatorManager {
         // http://stackoverflow.com/questions/9186806/gson-turn-an-array-of-data-objects-into-json-android/9198626#9198626
         saver.putInt(Constants.PREF_DRINK_LOG_SIZE, drinkLog.size());
         Gson gson = new Gson();
-        for(int i=0; i<drinkLog.size(); i++){
+        for(int i=0; i<drinkLog.size(); i++) {
             String json = gson.toJson(drinkLog.get(i));
             saver.putString(Constants.PREF_DRINK_LOG + i, json);
         }
-        saver.apply();
+        saver.commit();
     }
 
     public static double getAverageAlcoholEliminationRate(){
@@ -324,7 +345,7 @@ public class CalculatorManager {
     }
 
     public static double getFutureSoberTime(){
-        return futureSober;
+        return futureSoberTime;
     }
 
     /**
@@ -344,4 +365,23 @@ public class CalculatorManager {
 
     public static double getWeightInPounds() { return weightInPounds; }
 
+    public static int getDrinkLogSize(){
+        return drinkLog.size();
+    }
+
+    public static void addDrink(Drink drink){
+        drinkLog.add(drink);
+    }
+
+    public static Drink getDrink(int d){
+        return drinkLog.get(d);
+    }
+
+    public static Drink getFirstDrink(){
+        return drinkLog.get(getHowManyDrinksToEliminate());
+    }
+
+    public static ArrayList<Drink> getDrinkLog(){
+        return drinkLog;
+    }
 }

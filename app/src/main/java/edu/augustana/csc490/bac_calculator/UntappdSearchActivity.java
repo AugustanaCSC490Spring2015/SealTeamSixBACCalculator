@@ -72,12 +72,12 @@ public class UntappdSearchActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UntappdBeer selectedBeer = beers.get(i);
                 AddDrinkDialog addDrinkDialog = new AddDrinkDialog(UntappdSearchActivity.this, selectedBeer.getBeerName(), selectedBeer.getBeerABV());
-                final int numDrinks = CalculatorManager.drinkLog.size();
+                final int numDrinks = CalculatorManager.getDrinkLogSize();
                 addDrinkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         // If a new drink was added, return to dashboard
-                        if (CalculatorManager.drinkLog.size()>numDrinks) {
+                        if (CalculatorManager.getDrinkLogSize()>numDrinks) {
                             finish();
                         }
                     }
