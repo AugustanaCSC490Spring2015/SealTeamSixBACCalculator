@@ -126,8 +126,11 @@ public class CalculatorManager {
          */
 
         double numberOfHours = calculateFutureSoberTime(totalAlcoholWithWidmark, totalMSSinceFirstDrink);
-        futureSoberTime = numberOfHours;
-
+        if (numberOfHours < 0.00){
+            futureSoberTime = 0.00;
+        } else {
+            futureSoberTime = numberOfHours;
+        }
         // Save Preferences to backup
         saveBACPreferences();
     }
