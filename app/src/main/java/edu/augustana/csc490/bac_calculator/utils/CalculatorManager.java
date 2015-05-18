@@ -161,7 +161,8 @@ public class CalculatorManager {
 
         // Get total hours since first drink
         double totalHoursSinceFirstDrink;
-        if (end - start == 0 || !drinkLog.get(end - 1).isDrinkFinished()){
+        Log.e("BAC", "" + (end - start));
+        if ((end-start) > 1 && !drinkLog.get(end - 1).isDrinkFinished()){
             totalHoursSinceFirstDrink = getCurrentTimeInMS() - drinkLog.get(getHowManyDrinksToEliminate()).getDrinkStartedCalendar().getTimeInMillis();
         } else {
             totalHoursSinceFirstDrink = drinkLog.get(end - 1).getDrinkStartedCalendar().getTimeInMillis() - (drinkLog.get(0).getDrinkStartedCalendar().getTimeInMillis() * 1.0);
