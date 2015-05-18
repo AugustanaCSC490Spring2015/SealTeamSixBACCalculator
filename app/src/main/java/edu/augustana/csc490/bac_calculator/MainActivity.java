@@ -197,10 +197,10 @@ public class MainActivity extends ActionBarActivity {
                         NumberFormat formatter = new DecimalFormat("#0.0000");
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
-                        Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
-                        soberIn.setText((int) Math.floor(CalculatorManager.getFutureSoberTime()) + "." + (int) ((CalculatorManager.getFutureSoberTime() % 1) * 100)+" hr");
-
-
+                        // convert the sober time Double to String to parse out Hours and Minutes
+                        formatter = new DecimalFormat("#0.00");
+                        String soberDoubleString = formatter.format(CalculatorManager.getFutureSoberTime());
+                        soberIn.setText(soberDoubleString.substring(0, (soberDoubleString.length() - 3)) + ":" + (Integer.valueOf(soberDoubleString.substring(soberDoubleString.length() - 2, soberDoubleString.length())) * 60) / 100);
                         //graph view
                         GraphView graph = (GraphView) findViewById(R.id.graph);
                         graph.removeAllSeries(); // clear last graph
