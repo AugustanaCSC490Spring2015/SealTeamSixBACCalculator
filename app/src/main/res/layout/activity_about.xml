@@ -38,6 +38,8 @@
             android:id="@+id/aboutFormulasTextView"
             android:layout_gravity="center"
             android:paddingTop="15dp"
+            android:maxLines="5"
+            android:scrollbars="vertical"
             android:gravity="center_horizontal" />
 
     </LinearLayout>
