@@ -221,7 +221,7 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
                             drinkStartedCalendar, //drink started
                             drinkFinishedCalendar //drink ended
                     );
-                    CalculatorManager.drinkLog.add(drink); // add to drink log
+                    CalculatorManager.addDrink(drink); // add to drink log
                     dismiss(); // close dialog window
                 }
                 break;

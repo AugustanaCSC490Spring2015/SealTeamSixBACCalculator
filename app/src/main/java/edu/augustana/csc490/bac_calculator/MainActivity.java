@@ -241,7 +241,7 @@ public class MainActivity extends ActionBarActivity {
                             graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
                             // graph viewport settings
-                            graph.getViewport().setMinX(dataPoints[0].getX());
+                            graph.getViewport().setMinX(dataPoints[0].getX() - 0.15);
                             graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
                             graph.getViewport().setXAxisBoundsManual(true);
                             graph.getViewport().setMinY(0.0);
