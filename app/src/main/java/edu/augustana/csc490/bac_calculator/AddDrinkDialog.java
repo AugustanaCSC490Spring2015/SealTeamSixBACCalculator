@@ -194,6 +194,10 @@ public class AddDrinkDialog extends Dialog implements View.OnClickListener {
             // drink times in wrong order
             Toast.makeText(getContext(), "End time must be after start time", Toast.LENGTH_SHORT).show();
             return false;
+        } else if(CalculatorManager.getDrinkLogSize() > 0 && drinkStartedCalendar.before(CalculatorManager.getDrink(CalculatorManager.getDrinkLogSize()-1).getDrinkStartedCalendar())) {
+            //drink time before last drink
+            Toast.makeText(getContext(), "Drink time must be after previous drink", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             //valid drink
             Toast.makeText(getContext(), "Drink Added", Toast.LENGTH_SHORT).show();
