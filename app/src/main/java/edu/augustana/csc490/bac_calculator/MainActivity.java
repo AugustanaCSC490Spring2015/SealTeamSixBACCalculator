@@ -1,6 +1,5 @@
 package edu.augustana.csc490.bac_calculator;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -36,33 +35,35 @@ import edu.augustana.csc490.bac_calculator.utils.CalculatorManager;
 import edu.augustana.csc490.bac_calculator.utils.Constants;
 import edu.augustana.csc490.bac_calculator.utils.DrinkListArrayAdapter;
 
-
+/**
+ * MainActivity acts like a "dashboard" for the app. It displays the users current BAC, future BAC,
+ * time they will be sober, a graph of alcohol intake, list of previous drinks as well as a way to
+ * add new drinks
+ */
 public class MainActivity extends ActionBarActivity {
 
     Button addDrinkButton, finishDrinkButton;
-
     TextView currentBAC, futureBAC, soberIn;
-
     ListView drinkListView;
-
     DrinkListArrayAdapter drinkAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         CalculatorManager.savedPreferences = getSharedPreferences("BAC_CALCULATOR", MODE_PRIVATE);
         CalculatorManager.loadBACPreferences();
 
+        // get references to layout components
         currentBAC = (TextView) findViewById(R.id.current_BAC_value);
         futureBAC = (TextView) findViewById(R.id.future_BAC_value);
         soberIn = (TextView) findViewById(R.id.sober_in_value);
         drinkListView = (ListView) findViewById(R.id.drinkListView);
-
         finishDrinkButton = (Button) findViewById(R.id.finishDrinkButton);
-
         addDrinkButton = (Button) findViewById(R.id.addDrinkButton);
 
+        // Add Drink Listener
         addDrinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,28 +110,27 @@ public class MainActivity extends ActionBarActivity {
         finishDrinkButton.setOnClickListener(new View.OnClickListener() {  // TODO: Change This; Right now it updates the BAC Calculation
             @Override
             public void onClick(View v) {
-
                 if (CalculatorManager.isDrinkUnfinished()) {
                     // add dialog to confirm that they finished the drink
                     DialogFragment finishedDrinkDialog = new DialogFragment() {
                         // create an AlertDialog and return it
                         @Override
-                        public Dialog onCreateDialog(Bundle bundle){
+                        public Dialog onCreateDialog(Bundle bundle) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setCancelable(false);
 
                             builder.setMessage("Did you finish your drink?");
 
                             // "Reset Quiz" Button
-                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-                                public void onClick(DialogInterface dialog, int id){
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     CalculatorManager.finishDrink();
                                     Toast.makeText(MainActivity.this, "Drink Finished", Toast.LENGTH_SHORT).show();
                                 }
                             } // end anonymous inner class
                             ); // end call to setPositiveButton
-                            builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-                                        public void onClick(DialogInterface dialog, int id){
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
                                             dismiss();
                                         }
 
@@ -149,6 +149,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // Display drink log list
         drinkAdapter = new DrinkListArrayAdapter(this, R.layout.dashboard_list_item, CalculatorManager.getDrinkLog());
         drinkListView.setAdapter(drinkAdapter);
         drinkAdapter.notifyDataSetChanged();
@@ -174,11 +175,12 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // Timer to update BAC in header bar
         TimerTask updateBAC = new TimerTask() {
             @Override
             public void run() {
                 CalculatorManager.calculateCurrentAndFutureBAC();
-                //CalculatorManager.calculateFutureSoberTime();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -187,7 +189,7 @@ public class MainActivity extends ActionBarActivity {
                         currentBAC.setText(formatter.format(CalculatorManager.getCurrentBAC()));
                         futureBAC.setText(formatter.format(CalculatorManager.getFutureBAC()));
                         Log.e("BAC", "SOBER:" + CalculatorManager.getFutureSoberTime());
-                        soberIn.setText((int)Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int)((CalculatorManager.getFutureSoberTime() % 1) * 100));
+                        soberIn.setText((int) Math.floor(CalculatorManager.getFutureSoberTime()) + ":" + (int) ((CalculatorManager.getFutureSoberTime() % 1) * 100));
 
 
                         //graph view
@@ -203,7 +205,7 @@ public class MainActivity extends ActionBarActivity {
                         LineGraphSeries<DataPoint> series;
                         DataPoint[] dataPoints = new DataPoint[CalculatorManager.getDrinkLogSize() + 3];
 
-                        if (CalculatorManager.getDrinkLogSize()>0) {
+                        if (CalculatorManager.getDrinkLogSize() > 0) {
                             dataPoints[0] = new DataPoint(CalculatorManager.getDrink(0).getDrinkStartedCalendar().getTime(), 0.00); // first Drink Start time
 
                             //add drink end times
@@ -259,10 +261,8 @@ public class MainActivity extends ActionBarActivity {
                             graph.getViewport().setYAxisBoundsManual(true);
                             graph.getViewport().setScalable(true);
                         }
-
                     }
                 });
-
             }
         };
 
@@ -270,6 +270,9 @@ public class MainActivity extends ActionBarActivity {
         timer.scheduleAtFixedRate(updateBAC, 30, 5000);
     }
 
+    /**
+     * Update the drink list when resuming this activity
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -283,6 +286,12 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Activity menu for accessing settings, Untappd, etc..
+     *
+     * @param item The menu item selected
+     * @return true to close drop down
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle clicks on the action bar items
@@ -305,21 +314,5 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    /**
-     * Creates and shows the about dialog
-     */
-    private void showAboutDialog() {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.about_title)
-                .setMessage(R.string.about_text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing, close dialog
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
     }
 }
