@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/weight_text"
+            android:id="@+id/weightTextView"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbs_text"
+            android:id="@+id/lbsTextView"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_marginLeft="20dp" />
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/lbsEditText"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:inputType="numberDecimal"
+            android:editable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/sex_text"
+            android:id="@+id/sexTextView"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:layout_marginLeft="10dp" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="6"
+            android:id="@+id/genderRadioGroup"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male_text"
+                android:id="@+id/maleRadioButton"
+                android:layout_row="6"
+                android:layout_column="0" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female_text"
+                android:id="@+id/femaleRadioButton"
+                android:layout_row="6"
+                android:layout_column="1" />
+
+        </RadioGroup>
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/food_amount_text"
+        android:id="@+id/aOFISTextView"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:layout_marginLeft="10dp" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_row="8"
+        android:layout_column="0"
+        android:id="@+id/foodInBellyRadiogroup"
+        android:layout_marginLeft="10dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_text"
+            android:id="@+id/emptyRadioButton"
+            android:layout_row="9"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|left" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/running_low_text"
+            android:id="@+id/runningLowRadioButton"
+            android:layout_gravity="center_horizontal|left" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/satisfied_text"
+            android:id="@+id/satisfiedRadioButton"
+            android:layout_gravity="center_horizontal|left" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/full_text"
+            android:id="@+id/fullRadioButton"
+            android:layout_gravity="center_horizontal|left" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonLinearLayout"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_text"
+            android:id="@+id/saveButton"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

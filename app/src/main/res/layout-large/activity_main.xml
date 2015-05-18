@@ -1,0 +1,180 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/sober_in"
+            android:id="@+id/soberInTextView"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/sober_in"
+                android:id="@+id/sober_in_label"
+
+                android:padding="0dp"
+                android:textSize="@dimen/label_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0:00"
+                android:id="@+id/sober_in_value"
+                android:textColor="@color/label_value_color" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:id="@+id/divider1"
+            android:padding="0dp"
+            android:background="#ff598fa2" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/current_BAC"
+                android:id="@+id/current_BAC_label"
+                android:padding="0dp"
+                android:textSize="@dimen/label_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0.00"
+                android:id="@+id/current_BAC_value"
+                android:textColor="@color/label_value_color" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:id="@+id/divider2"
+            android:background="#ff598fa2"
+            android:padding="0dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dashboard_button_height"
+            android:layout_weight="1"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:background="@drawable/dashboard_gradient">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/max_BAC"
+                android:id="@+id/future_BAC_label"
+
+                android:padding="0dp"
+                android:textSize="@dimen/label_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0.00"
+                android:id="@+id/future_BAC_value"
+                android:textColor="@color/label_value_color" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:id="@+id/graph"
+        android:background="#dddddd"
+        android:layout_marginLeft="@dimen/edge_padding"
+        android:layout_marginTop="@dimen/edge_padding"
+        android:layout_marginRight="@dimen/edge_padding" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/history_label"
+        android:id="@+id/textView4"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/edge_padding"
+        android:textSize="24dp"
+        android:textColor="#7ab1c4"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="@dimen/edge_padding"
+        android:id="@+id/layout">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/drinkListView"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="false"
+            android:layout_above="@+id/finishDrinkButton"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/edge_padding"
+            android:layout_marginTop="@dimen/edge_padding" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_drink_button"
+            android:id="@+id/addDrinkButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/dash_btn_blue"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/finish_drink"
+            android:id="@+id/finishDrinkButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_above="@+id/addDrinkButton"
+            android:background="@drawable/dash_btn_gray"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    </RelativeLayout>
+
+</LinearLayout>
