@@ -24,7 +24,9 @@ import edu.augustana.csc490.bac_calculator.utils.Constants;
 import edu.augustana.csc490.bac_calculator.utils.GetJSON;
 
 /**
- * Created by Dan on 4/20/15.
+ * UntappdSettingsActivity is a child class of MainActivity and allows the user to authorise this
+ * app to use their Untappd account. It displays info about the user when logged in as well as the
+ * number of hourly API calls left
  */
 public class UntappdSettingsActivity extends ActionBarActivity {
 
@@ -33,6 +35,11 @@ public class UntappdSettingsActivity extends ActionBarActivity {
     TextView untappdAuthDirections;
     TextView untappdUserInfo; // Displays info about user logged in
 
+    /**
+     * Sets up the screen and log in functionality
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +62,11 @@ public class UntappdSettingsActivity extends ActionBarActivity {
             updateUserInfo();
         }
 
+        // Listener for authorise app button
         authAppButton.setOnClickListener(new View.OnClickListener() {
             Dialog dialog;
             WebView webView;
+
             @Override
             public void onClick(View view) {
                 // Check if the user is logging in out out
@@ -70,10 +79,12 @@ public class UntappdSettingsActivity extends ActionBarActivity {
                     editor.putString(Constants.PREF_USER_USERNAME, null);
                     editor.commit();
 
+                    // Remove user info and change button back to Authorise mode
                     authAppButton.setText(R.string.auth_app_btn);
                     untappdUserInfo.setText("");
                 } else {
                     // User is logging in
+                    // Create a dialog containing a webview that loads the Untappd website so the user can log in
                     dialog = new Dialog(UntappdSettingsActivity.this);
                     dialog.setContentView(R.layout.auth_dialog);
                     dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
@@ -90,6 +101,7 @@ public class UntappdSettingsActivity extends ActionBarActivity {
                         boolean haveToken = false;
                         String token;
 
+                        // Called whenever a page finishes
                         @Override
                         public void onPageFinished(WebView view, String url) {
                             super.onPageFinished(view, url);
@@ -111,6 +123,8 @@ public class UntappdSettingsActivity extends ActionBarActivity {
                                 // close dialog
                                 dialog.dismiss();
                             } else if (url.toLowerCase().contains(Constants.REDIRECT_URL) && sharedPreferences.getString(Constants.PREF_UNTAPPD_TOKEN, null) == null && !url.toLowerCase().contains("client_id=")) {
+                                // Bug with Untappd API where user is authorised but no token is returned, opened case with Untappd
+
                                 // Redirected to redirect url without token
                                 Log.wtf("Bad Redirect from Untappd: ", url);
                                 // Ask user to try again and close the webview dialog
@@ -134,6 +148,9 @@ public class UntappdSettingsActivity extends ActionBarActivity {
 
     } // end method onCreate
 
+    /**
+     * Sets user info in a displayable format on the screen after user is logged in
+     */
     private void updateUserInfo() {
         authAppButton.setText(R.string.sign_out);
 
@@ -141,17 +158,23 @@ public class UntappdSettingsActivity extends ActionBarActivity {
         String last_name = sharedPreferences.getString(Constants.PREF_USER_LAST_NAME, "");
         String user_name = sharedPreferences.getString(Constants.PREF_USER_USERNAME, "");
 
-        String userInfo = "Logged in as " + first_name + " " + last_name + " (" + user_name +") " +
-                "\nUntappd API Hourly Call Rate Limit Remaining: " + sharedPreferences.getString(Constants.PREF_RATE_LIMIT_REMAINING,"?") + "/100";
+        // See github issue about refreshing rate limit
+        String userInfo = "Logged in as " + first_name + " " + last_name + " (" + user_name + ") " +
+                "\nUntappd API Hourly Call Rate Limit Remaining: " + sharedPreferences.getString(Constants.PREF_RATE_LIMIT_REMAINING, "?") + "/100";
 
         untappdUserInfo.setText(userInfo);
     }
 
-    // Note: AsyncTask must be subclassed to be used.
+    /**
+     * GetUserInfo runs the API call on a new thread in the background as networking should not
+     * (and can not) be run on the UI thread. After the user authorises the app and gets an access
+     * token, this inner class calls the API to get info on the user and store it in preferences
+     */
     private class GetUserInfo extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog progressDialog;
         private String token;
 
+        // Before the API call
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -164,6 +187,7 @@ public class UntappdSettingsActivity extends ActionBarActivity {
             progressDialog.show();
         }
 
+        // Run API call in background of UI thread
         @Override
         protected JSONObject doInBackground(String... args) {
             GetJSON jsonParser = new GetJSON(UntappdSettingsActivity.this);
@@ -171,6 +195,7 @@ public class UntappdSettingsActivity extends ActionBarActivity {
             return jsonObject;
         }
 
+        // After API call is made, parse JSON and store in prefs
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             progressDialog.dismiss();
