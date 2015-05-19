@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 import edu.augustana.csc490.bac_calculator.Drink;
 
@@ -22,7 +21,6 @@ public class CalculatorManager {
     private static double futureSoberTime; // time in a Double format
 
     private static ArrayList<Drink> drinkLog;
-    public static Map<Calendar, Double> BACHistory;
 
     // SharedPreferences stuff
     public static SharedPreferences savedPreferences;
@@ -138,11 +136,7 @@ public class CalculatorManager {
     public static boolean isDrinkUnfinished() {
         if (drinkLog.size() > 0) {
             Drink latestDrink = drinkLog.get(drinkLog.size() - 1);
-            if (latestDrink.isDrinkFinished()) {
-                return false;
-            } else {
-                return true;
-            }
+            return !latestDrink.isDrinkFinished();
         }
         return false;
     }
@@ -309,11 +303,11 @@ public class CalculatorManager {
     }
 
     public static double getAverageAlcoholEliminationRate(){
-
+        double eliminationRate = getHowMuchAte() * 0.002;
         if (isMale){
-            return 0.017;
+            return 0.017 + eliminationRate;
         } else {
-            return 0.015;
+            return 0.015 + eliminationRate;
         }
     }
 
@@ -379,10 +373,6 @@ public class CalculatorManager {
 
     public static Drink getDrink(int d){
         return drinkLog.get(d);
-    }
-
-    public static Drink getFirstDrink(){
-        return drinkLog.get(getHowManyDrinksToEliminate());
     }
 
     public static ArrayList<Drink> getDrinkLog(){

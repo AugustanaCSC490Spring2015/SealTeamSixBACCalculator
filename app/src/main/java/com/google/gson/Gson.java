@@ -721,7 +721,7 @@ public final class Gson {
       return null;
     }
     StringReader reader = new StringReader(json);
-    T target = (T) fromJson(reader, typeOfT);
+    T target = fromJson(reader, typeOfT);
     return target;
   }
 
@@ -772,7 +772,7 @@ public final class Gson {
   @SuppressWarnings("unchecked")
   public <T> T fromJson(Reader json, Type typeOfT) throws JsonIOException, JsonSyntaxException {
     JsonReader jsonReader = new JsonReader(json);
-    T object = (T) fromJson(jsonReader, typeOfT);
+    T object = fromJson(jsonReader, typeOfT);
     assertFullConsumption(object, jsonReader);
     return object;
   }

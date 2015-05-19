@@ -34,7 +34,7 @@ public class GetJSON {
      */
     public GetJSON(Context context) {
         // load preferences
-        sharedPreferences = context.getSharedPreferences(Constants.PREF_FILE, context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(Constants.PREF_FILE, Context.MODE_PRIVATE);
     }
 
     /**
